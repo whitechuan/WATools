@@ -1,0 +1,14 @@
+[data-theme="cherry-blossom"] {
+  --neu-bg: #fce4ec;
+  --neu-bg-dark: #f0cdd6;
+  --neu-shadow-light: #ffffff;
+  --neu-shadow-dark: #e0b5c0;
+  --color-primary: #f472b6;
+  --color-primary-light: #f9a8d4;
+  --color-primary-dark: #ec4899;
+  --color-secondary: #fda4af;
+  --color-accent: #fb7185;
+  --text-primary: #3d1f2e;
+  --text-secondary: #6e4a5a;
+  --text-muted: #ad8a98;
+}

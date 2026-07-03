@@ -1,0 +1,14 @@
+[data-theme="ocean-breeze"] {
+  --neu-bg: #e0f2f7;
+  --neu-bg-dark: #c9e0ea;
+  --neu-shadow-light: #ffffff;
+  --neu-shadow-dark: #b3cdd9;
+  --color-primary: #00b4d8;
+  --color-primary-light: #48cae4;
+  --color-primary-dark: #0096c7;
+  --color-secondary: #00d2d3;
+  --color-accent: #0077b6;
+  --text-primary: #1b2838;
+  --text-secondary: #4a6572;
+  --text-muted: #90a4ae;
+}

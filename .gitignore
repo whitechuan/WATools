@@ -1,0 +1,56 @@
+# ============================================
+# WATools .gitignore
+# ============================================
+
+# ---------- Node.js ----------
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# ---------- Vite / 构建产物 ----------
+dist/
+dist-ssr/
+*.local
+
+# ---------- Tauri / Rust ----------
+src-tauri/target/
+# Tauri 自动生成的 schema 文件
+src-tauri/gen/
+
+# ---------- 数据库（本地数据不提交） ----------
+*.db
+*.db-shm
+*.db-wal
+
+# ---------- 编辑器 / IDE ----------
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ---------- 环境变量与敏感文件 ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---------- 操作系统临时文件 ----------
+Desktop.ini
+ehthumbs.db
+
+# ---------- 日志 ----------
+*.log
+logs/
+
+# ---------- 其他 ----------
+*.tsbuildinfo
+.cache/

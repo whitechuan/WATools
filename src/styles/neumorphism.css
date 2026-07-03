@@ -1,0 +1,114 @@
+/* Neumorphism Base Styles */
+
+.neu-raised {
+  background: var(--neu-bg);
+  border-radius: var(--neu-radius);
+  box-shadow: var(--neu-shadow-raised);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.neu-pressed {
+  background: var(--neu-bg);
+  border-radius: var(--neu-radius);
+  box-shadow: var(--neu-shadow-pressed);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.neu-flat {
+  background: var(--neu-bg);
+  border-radius: var(--neu-radius);
+  box-shadow: var(--neu-shadow-flat);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+/* Button Base */
+.neu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--neu-bg);
+  border: none;
+  border-radius: var(--neu-radius);
+  box-shadow: var(--neu-shadow-raised);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+}
+
+.neu-btn:hover {
+  box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light);
+  transform: translateY(-1px);
+}
+
+.neu-btn:active {
+  box-shadow: var(--neu-shadow-pressed);
+  transform: translateY(0);
+}
+
+.neu-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--neu-shadow-flat);
+}
+
+/* Button Primary */
+.neu-btn--primary {
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+  color: var(--text-inverse);
+}
+
+.neu-btn--primary:hover {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+}
+
+/* Button Variants */
+.neu-btn--success {
+  background: linear-gradient(135deg, var(--color-success), #27ae60);
+  color: var(--text-inverse);
+}
+
+.neu-btn--warning {
+  background: linear-gradient(135deg, var(--color-warning), #e69500);
+  color: var(--text-inverse);
+}
+
+.neu-btn--danger {
+  background: linear-gradient(135deg, var(--color-error), #e03e4a);
+  color: var(--text-inverse);
+}
+
+/* Input Base */
+.neu-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--neu-bg);
+  border: none;
+  border-radius: var(--neu-radius-sm);
+  box-shadow: var(--neu-shadow-pressed);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  outline: none;
+  transition: box-shadow var(--transition-normal);
+}
+
+.neu-input::placeholder {
+  color: var(--text-muted);
+}
+
+.neu-input:focus {
+  box-shadow: var(--neu-shadow-pressed), 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+.neu-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,14 @@
+[data-theme="sunset-glow"] {
+  --neu-bg: #fce8e0;
+  --neu-bg-dark: #f0d4c8;
+  --neu-shadow-light: #ffffff;
+  --neu-shadow-dark: #e0bfb3;
+  --color-primary: #ff6b35;
+  --color-primary-light: #ff8c5a;
+  --color-primary-dark: #e55a2b;
+  --color-secondary: #ff9a76;
+  --color-accent: #ffd166;
+  --text-primary: #3d2c2c;
+  --text-secondary: #6b4f4f;
+  --text-muted: #a88f8f;
+}

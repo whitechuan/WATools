@@ -1,0 +1,30 @@
+{
+  "productName": "WATools",
+  "version": "0.1.0",
+  "identifier": "com.dev.watools",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "beforeBuildCommand": "pnpm build",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "WATools - 开发者工具箱",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "decorations": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "sql": {
+      "preload": ["sqlite:watools.db"]
+    }
+  }
+}

@@ -1,0 +1,131 @@
+/* Page Transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Button Press Feedback */
+@keyframes neu-press {
+  0% {
+    transform: scale(1);
+    box-shadow: var(--neu-shadow-raised);
+  }
+  50% {
+    transform: scale(0.96);
+    box-shadow: var(--neu-shadow-pressed);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: var(--neu-shadow-raised);
+  }
+}
+
+.neu-press {
+  animation: neu-press 0.3s ease;
+}
+
+/* Card Appear Animation */
+@keyframes neu-appear {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.neu-appear {
+  animation: neu-appear 0.4s ease forwards;
+}
+
+/* Staggered List Appear */
+.neu-appear-list > * {
+  opacity: 0;
+  animation: neu-appear 0.4s ease forwards;
+}
+
+.neu-appear-list > *:nth-child(1) { animation-delay: 0.05s; }
+.neu-appear-list > *:nth-child(2) { animation-delay: 0.1s; }
+.neu-appear-list > *:nth-child(3) { animation-delay: 0.15s; }
+.neu-appear-list > *:nth-child(4) { animation-delay: 0.2s; }
+.neu-appear-list > *:nth-child(5) { animation-delay: 0.25s; }
+.neu-appear-list > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* Fade Transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-normal);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide Up Transition */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Scale Transition */
+.scale-enter-active,
+.scale-leave-active {
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* Pulse Animation (for loading states) */
+@keyframes neu-pulse {
+  0%, 100% {
+    box-shadow: var(--neu-shadow-raised);
+  }
+  50% {
+    box-shadow: var(--neu-shadow-flat);
+  }
+}
+
+.neu-pulse {
+  animation: neu-pulse 1.5s ease-in-out infinite;
+}
+
+/* Spinner */
+@keyframes neu-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.neu-spin {
+  animation: neu-spin 1s linear infinite;
+}

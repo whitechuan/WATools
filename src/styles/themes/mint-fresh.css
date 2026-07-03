@@ -1,0 +1,14 @@
+[data-theme="mint-fresh"] {
+  --neu-bg: #e0f5ee;
+  --neu-bg-dark: #c8e6da;
+  --neu-shadow-light: #ffffff;
+  --neu-shadow-dark: #aed4c5;
+  --color-primary: #00b894;
+  --color-primary-light: #55efc4;
+  --color-primary-dark: #00896e;
+  --color-secondary: #81ecec;
+  --color-accent: #00cec9;
+  --text-primary: #1e3a2f;
+  --text-secondary: #4a6e5c;
+  --text-muted: #8fafa0;
+}

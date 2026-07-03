@@ -1,0 +1,52 @@
+:root {
+  /* 拟态核心变量 */
+  --neu-bg: #e8f0f7;
+  --neu-bg-dark: #d1dce6;
+  --neu-shadow-light: #ffffff;
+  --neu-shadow-dark: #bec8d1;
+  --neu-radius: 16px;
+  --neu-radius-sm: 10px;
+  --neu-radius-lg: 24px;
+
+  /* 浮凸阴影 */
+  --neu-shadow-raised: 6px 6px 12px var(--neu-shadow-dark), -6px -6px 12px var(--neu-shadow-light);
+  --neu-shadow-pressed: inset 4px 4px 8px var(--neu-shadow-dark), inset -4px -4px 8px var(--neu-shadow-light);
+  --neu-shadow-flat: 3px 3px 6px var(--neu-shadow-dark), -3px -3px 6px var(--neu-shadow-light);
+
+  /* 主题色彩 */
+  --color-primary: #6c63ff;
+  --color-primary-light: #8b83ff;
+  --color-primary-dark: #5046e5;
+  --color-secondary: #ff6b9d;
+  --color-accent: #00d2d3;
+  --color-success: #2ed573;
+  --color-warning: #ffa502;
+  --color-error: #ff4757;
+  --color-info: #70a1ff;
+
+  /* 文字 */
+  --text-primary: #2d3436;
+  --text-secondary: #636e72;
+  --text-muted: #b2bec3;
+  --text-inverse: #ffffff;
+
+  /* 字体 */
+  --font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* 动画 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}

@@ -1,0 +1,14 @@
+[data-theme="lavender-dream"] {
+  --neu-bg: #f0e6f6;
+  --neu-bg-dark: #ddd0e8;
+  --neu-shadow-light: #ffffff;
+  --neu-shadow-dark: #c9b8d8;
+  --color-primary: #a855f7;
+  --color-primary-light: #c084fc;
+  --color-primary-dark: #9333ea;
+  --color-secondary: #e879f9;
+  --color-accent: #7c3aed;
+  --text-primary: #2d1f3d;
+  --text-secondary: #5c4a6e;
+  --text-muted: #9b8aad;
+}
