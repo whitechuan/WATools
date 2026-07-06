@@ -86,6 +86,33 @@
         </NeuButton>
       </div>
     </NeuCard>
+
+    <!-- 许可证信息 -->
+    <NeuCard title="📄 许可证信息" elevation="raised" class="settings-view__section">
+      <div class="settings-view__about">
+        <div class="settings-view__about-header">
+          <span class="settings-view__about-name">WATools</span>
+          <NeuTag type="info">v1.0.0</NeuTag>
+        </div>
+        <p class="settings-view__about-desc">
+          WATools - 开发者工具箱，基于 Tauri v2 + Vue 3 构建
+        </p>
+        <div class="settings-view__row">
+          <label class="settings-view__label">许可证</label>
+          <span class="settings-view__info">MIT License</span>
+        </div>
+        <div class="settings-view__row">
+          <label class="settings-view__label">版权声明</label>
+          <span class="settings-view__info">Copyright &copy; 2024-2026 WATools</span>
+        </div>
+        <div class="settings-view__tech-tags">
+          <NeuTag type="primary">Tauri</NeuTag>
+          <NeuTag type="success">Vue 3</NeuTag>
+          <NeuTag type="warning">TypeScript</NeuTag>
+          <NeuTag type="danger">Rust</NeuTag>
+        </div>
+      </div>
+    </NeuCard>
   </div>
 </template>
 
@@ -95,6 +122,7 @@ import NeuCard from '@/components/neu/NeuCard.vue'
 import NeuSelect from '@/components/neu/NeuSelect.vue'
 import NeuSwitch from '@/components/neu/NeuSwitch.vue'
 import NeuButton from '@/components/neu/NeuButton.vue'
+import NeuTag from '@/components/neu/NeuTag.vue'
 import ThemeSelector from '@/components/common/ThemeSelector.vue'
 import { useSettingsStore } from '@/stores/settings'
 import { useHistoryStore } from '@/stores/history'
@@ -235,6 +263,33 @@ onMounted(async () => {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-md);
+  padding-top: var(--spacing-md);
+}
+
+.settings-view__about-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.settings-view__about-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.settings-view__about-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-md);
+  line-height: 1.6;
+}
+
+.settings-view__tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
   padding-top: var(--spacing-md);
 }
 </style>
