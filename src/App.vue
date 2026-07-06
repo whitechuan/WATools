@@ -12,14 +12,20 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import AppSidebar from '@/components/layout/AppSidebar.vue'
+import { initShortcuts, cleanupShortcuts } from '@/utils/shortcuts'
 
 const { loadTheme } = useTheme()
 
-onMounted(() => {
+onMounted(async () => {
   loadTheme()
+  await initShortcuts()
+})
+
+onUnmounted(() => {
+  cleanupShortcuts()
 })
 </script>
 
