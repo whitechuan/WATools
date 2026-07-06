@@ -8,9 +8,18 @@
 
 | 工具 | 描述 |
 |------|------|
-| JSON 格式化 | JSON 数据的格式化、压缩与校验 |
-| JWT 解析 | JWT Token 的解码与结构分析 |
-| 时间转换 | 时间戳与日期格式互转，支持多时区 |
+| 🕐 时间转换 | 时间戳与日期格式互转，支持多时区 |
+| 📋 JSON 格式化 | JSON 数据的格式化、压缩与校验 |
+| 🔑 JWT 解析 | JWT Token 的解码与结构分析 |
+| #️⃣ Hash 计算器 | 支持 MD5、SHA1、SHA256 等哈希算法 |
+| 🔗 URL 编解码 | URL 特殊字符的编码与解码 |
+| 📝 文本 Diff | 两段文本的差异对比与高亮展示 |
+| 🆔 UUID 生成器 | 快速生成 UUID v4 / v7 |
+| 🎨 颜色转换 | HEX、RGB、HSL 等颜色格式互转 |
+| 🎯 正则测试器 | 实时匹配正则表达式，高亮匹配结果 |
+| 🔤 Base64 编解码 | Base64 编码与解码转换 |
+| ⏲️ Cron 解析器 | 解析 Cron 表达式，展示执行计划 |
+| 🌐 HTTP 请求器 | 发送 HTTP 请求，查看响应结果 |
 
 - 🎨 **新拟态 UI**：自研 `neu` 组件库，提供统一的视觉风格
 - 🌈 **多主题支持**：内置樱花、薰衣草、薄荷、海风、星空、日落等多套主题
@@ -31,6 +40,14 @@
 - [chrono](https://crates.io/crates/chrono) - 日期时间处理
 - [jsonwebtoken](https://crates.io/crates/jsonwebtoken) - JWT 解析
 - [tauri-plugin-sql](https://crates.io/crates/tauri-plugin-sql) - SQLite 数据库插件
+- [sha2](https://crates.io/crates/sha2) / [sha1](https://crates.io/crates/sha1) / [md-5](https://crates.io/crates/md-5) - 哈希算法
+- [regex](https://crates.io/crates/regex) - 正则表达式引擎
+- [reqwest](https://crates.io/crates/reqwest) - HTTP 客户端
+- [uuid](https://crates.io/crates/uuid) - UUID 生成（v4 / v7）
+- [cron](https://crates.io/crates/cron) - Cron 表达式解析
+- [similar](https://crates.io/crates/similar) - 文本差异对比
+- [url](https://crates.io/crates/url) / [percent-encoding](https://crates.io/crates/percent-encoding) - URL 编解码
+- [base64](https://crates.io/crates/base64) - Base64 编解码
 
 ## 📦 环境要求
 
@@ -79,7 +96,7 @@ WATools/
 │   ├── types/                    # TypeScript 类型定义
 │   ├── utils/                    # 工具函数
 │   └── views/
-│       └── tools/                # 工具页面视图
+│       └── tools/                # 工具页面视图（12 个工具）
 ├── src-tauri/                    # Rust 后端
 │   └── src/
 │       └── commands/             # Tauri 命令（前端可调用的后端函数）
