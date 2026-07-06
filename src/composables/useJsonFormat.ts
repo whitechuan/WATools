@@ -114,6 +114,15 @@ export function useJsonFormat() {
     }
   }
 
+  // 清空重置
+  function clearAll() {
+    input.value = ''
+    output.value = ''
+    validation.value = null
+    stats.value = null
+    errorMessage.value = ''
+  }
+
   // 自动验证（带防抖）
   let validateTimer: ReturnType<typeof setTimeout> | null = null
   watch(input, (val) => {
@@ -141,6 +150,7 @@ export function useJsonFormat() {
     saveIndentPreference,
     formatJson,
     minifyJson,
-    validateJson
+    validateJson,
+    clearAll
   }
 }

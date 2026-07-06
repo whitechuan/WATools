@@ -1,13 +1,56 @@
 <template>
   <div class="json-formatter">
+    <!-- 顶部状态栏 -->
+    <NeuCard elevation="flat" class="json-formatter__status">
+      <div
+        v-if="validation?.valid && stats"
+        class="json-formatter__status-inner json-formatter__status-success"
+        :title="`有效 JSON | 行: ${stats.lines} | 键: ${stats.keys} | 深度: ${stats.max_depth} | ${stats.size_bytes} bytes`"
+      >
+        <NeuTag type="success">✓ 有效 JSON</NeuTag>
+        <span class="json-formatter__stat-sep">│</span>
+        <span class="json-formatter__stat">行: {{ stats.lines }}</span>
+        <span class="json-formatter__stat-sep">│</span>
+        <span class="json-formatter__stat">键: {{ stats.keys }}</span>
+        <span class="json-formatter__stat-sep">│</span>
+        <span class="json-formatter__stat">深度: {{ stats.max_depth }}</span>
+        <span class="json-formatter__stat-sep">│</span>
+        <span class="json-formatter__stat">{{ stats.size_bytes }} bytes</span>
+      </div>
+      <div
+        v-else-if="validation && !validation.valid"
+        class="json-formatter__status-inner json-formatter__status-error"
+        :title="[validation.error_message, ...validation.suggestions].join(' | ')"
+      >
+        <span class="json-formatter__error-msg">⚠ {{ validation.error_message }}</span>
+        <template v-if="validation.suggestions.length">
+          <span class="json-formatter__stat-sep">│</span>
+          <span
+            v-for="(suggestion, idx) in validation.suggestions"
+            :key="idx"
+            class="json-formatter__suggestion"
+          >💡 {{ suggestion }}</span>
+        </template>
+      </div>
+      <div
+        v-else-if="errorMessage"
+        class="json-formatter__status-inner json-formatter__status-error"
+        :title="errorMessage"
+      >
+        <span class="json-formatter__error-msg">⚠ {{ errorMessage }}</span>
+      </div>
+      <div v-else class="json-formatter__status-inner json-formatter__status-idle">
+        <span class="json-formatter__idle-text">📋 输入 JSON 后自动验证</span>
+      </div>
+    </NeuCard>
+
     <!-- 主体双栏 -->
     <div class="json-formatter__columns">
       <!-- 左栏 - 输入区 -->
-      <NeuCard title="输入" elevation="raised">
+      <NeuCard title="输入" elevation="raised" class="json-formatter__input-card">
         <NeuTextarea
           v-model="input"
           placeholder="在此粘贴 JSON..."
-          :rows="16"
           :show-count="true"
           class="json-formatter__textarea"
         />
@@ -22,12 +65,15 @@
             <NeuButton :loading="isLoading" @click="validateJson">
               验证
             </NeuButton>
+            <NeuButton type="danger" @click="clearAll">
+              🗑️ 清空
+            </NeuButton>
           </div>
         </template>
       </NeuCard>
 
       <!-- 右栏 - 输出区 -->
-      <NeuCard title="输出" elevation="raised">
+      <NeuCard title="输出" elevation="raised" class="json-formatter__output-card">
         <div class="json-formatter__output neu-pressed">
           <pre
             v-if="output"
@@ -51,38 +97,6 @@
         </template>
       </NeuCard>
     </div>
-
-    <!-- 底部状态栏 -->
-    <NeuCard elevation="flat" class="json-formatter__status">
-      <div v-if="validation?.valid && stats" class="json-formatter__status-success">
-        <NeuTag type="success">✓ 有效 JSON</NeuTag>
-        <span class="json-formatter__stat">行: {{ stats.lines }}</span>
-        <span class="json-formatter__stat-sep">│</span>
-        <span class="json-formatter__stat">键: {{ stats.keys }}</span>
-        <span class="json-formatter__stat-sep">│</span>
-        <span class="json-formatter__stat">深度: {{ stats.max_depth }}</span>
-        <span class="json-formatter__stat-sep">│</span>
-        <span class="json-formatter__stat">{{ stats.size_bytes }} bytes</span>
-      </div>
-      <div v-else-if="validation && !validation.valid" class="json-formatter__status-error">
-        <span class="json-formatter__error-msg">
-          ⚠ 错误: {{ validation.error_message }}
-        </span>
-        <span
-          v-for="(suggestion, idx) in validation.suggestions"
-          :key="idx"
-          class="json-formatter__suggestion"
-        >
-          💡 建议: {{ suggestion }}
-        </span>
-      </div>
-      <div v-else-if="errorMessage" class="json-formatter__status-error">
-        <span class="json-formatter__error-msg">⚠ {{ errorMessage }}</span>
-      </div>
-      <div v-else class="json-formatter__status-idle">
-        <span class="json-formatter__idle-text">等待输入...</span>
-      </div>
-    </NeuCard>
   </div>
 </template>
 
@@ -110,7 +124,8 @@ const {
   saveIndentPreference,
   formatJson,
   minifyJson,
-  validateJson
+  validateJson,
+  clearAll
 } = useJsonFormat()
 
 const indentOptions = [
@@ -175,7 +190,10 @@ onMounted(() => {
 .json-formatter__columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   gap: var(--spacing-lg);
+  flex: 1;
+  min-height: 0;
 }
 
 @media (max-width: 768px) {
@@ -184,9 +202,59 @@ onMounted(() => {
   }
 }
 
+/* 左右卡片 flex 填充 */
+.json-formatter__input-card,
+.json-formatter__output-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.json-formatter__input-card :deep(.neu-card__body),
+.json-formatter__output-card :deep(.neu-card__body) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.json-formatter__input-card :deep(.neu-card__footer) {
+  flex-shrink: 0;
+}
+
+.json-formatter__output-card :deep(.neu-card__footer) {
+  flex-shrink: 0;
+}
+
+/* textarea 自适应 */
+.json-formatter__textarea {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.json-formatter__textarea :deep(.neu-textarea-wrapper) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .json-formatter__textarea :deep(.neu-textarea-field) {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+  overflow-y: auto;
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   font-size: var(--font-size-sm);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.json-formatter__textarea :deep(.neu-textarea-field)::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Webkit */
 }
 
 .json-formatter__actions {
@@ -196,13 +264,19 @@ onMounted(() => {
 }
 
 .json-formatter__output {
-  min-height: 320px;
-  max-height: 420px;
-  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: var(--spacing-md);
   border-radius: var(--neu-radius-sm);
   box-shadow: var(--neu-shadow-pressed);
   background: var(--neu-bg);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.json-formatter__output::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Webkit */
 }
 
 .json-formatter__code {
@@ -235,11 +309,22 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
+.json-formatter__status :deep(.neu-card__body) {
+  min-height: 48px;
+  max-height: 60px;
+  overflow: hidden;
+}
+
+.json-formatter__status-inner {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .json-formatter__status-success {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  flex-wrap: wrap;
 }
 
 .json-formatter__stat {
@@ -254,8 +339,8 @@ onMounted(() => {
 
 .json-formatter__status-error {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .json-formatter__error-msg {

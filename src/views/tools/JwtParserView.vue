@@ -1,24 +1,11 @@
 <template>
   <div class="jwt-parser-view">
-    <!-- 区块1: 输入区 -->
-    <NeuCard elevation="raised" title="🔑 JWT 解析工具">
-      <NeuTextarea
-        v-model="token"
-        :rows="4"
-        placeholder="粘贴 JWT Token..."
-      />
-      <div class="jwt-parser-view__actions">
-        <NeuButton type="primary" :loading="isDecoding" @click="decodeJwt">
-          解析
-        </NeuButton>
-        <NeuButton @click="clear">清空</NeuButton>
-      </div>
-      <p v-if="decodeError" class="jwt-parser-view__error">{{ decodeError }}</p>
-    </NeuCard>
-
-    <!-- 区块2: 状态区 -->
-    <NeuCard v-if="decodeResult" elevation="flat">
-      <div class="jwt-parser-view__status">
+    <!-- 顶部状态栏 -->
+    <NeuCard elevation="flat" class="jwt-parser-view__status">
+      <div
+        v-if="decodeResult"
+        class="jwt-parser-view__status-inner"
+      >
         <NeuTag type="success">Token 有效</NeuTag>
         <NeuTag v-if="decodeResult.is_expired" type="danger">
           已过期{{ decodeResult.expires_at ? ' · ' + decodeResult.expires_at : '' }}
@@ -28,81 +15,78 @@
         </NeuTag>
         <NeuTag v-else type="info">无过期信息</NeuTag>
       </div>
+      <div v-else-if="decodeError" class="jwt-parser-view__status-inner jwt-parser-view__status-error">
+        <span class="jwt-parser-view__error-msg">⚠️ {{ decodeError }}</span>
+      </div>
+      <div v-else class="jwt-parser-view__status-inner jwt-parser-view__status-idle">
+        <span class="jwt-parser-view__idle-text">🔑 粘贴 JWT Token 进行解析</span>
+      </div>
     </NeuCard>
 
-    <!-- 区块3: 解码结果 -->
-    <NeuCard v-if="decodeResult" elevation="raised">
-      <NeuTabs v-model="activeTab" :tabs="tabOptions" />
-      <div class="jwt-parser-view__tab-content">
-        <!-- Header -->
-        <div v-show="activeTab === 'header'">
-          <div class="jwt-parser-view__code-block">
-            <pre>{{ formatJson(decodeResult.header) }}</pre>
+    <!-- 主体双栏 -->
+    <div class="jwt-parser-view__columns">
+      <!-- 左栏 - 输入区 -->
+      <NeuCard title="🔑 JWT 解析工具" elevation="raised" class="jwt-parser-view__input-card">
+        <NeuTextarea
+          v-model="token"
+          placeholder="粘贴 JWT Token..."
+          class="jwt-parser-view__textarea"
+        />
+        <template #footer>
+          <div class="jwt-parser-view__actions">
+            <NeuButton type="primary" :loading="isDecoding" @click="decodeJwt">
+              解析
+            </NeuButton>
+            <NeuButton @click="clear">清空</NeuButton>
           </div>
-          <div class="jwt-parser-view__copy-row">
-            <CopyButton :content="formatJson(decodeResult.header)" />
-          </div>
-        </div>
+        </template>
+      </NeuCard>
 
-        <!-- Payload -->
-        <div v-show="activeTab === 'payload'">
-          <div class="jwt-parser-view__code-block">
-            <pre>{{ formatJson(decodeResult.payload) }}</pre>
-          </div>
-          <div v-if="payloadTimeFields.length > 0" class="jwt-parser-view__time-info">
-            <div v-for="field in payloadTimeFields" :key="field.key" class="jwt-parser-view__time-item">
-              <span class="jwt-parser-view__time-label">{{ field.label }}</span>
-              <span class="jwt-parser-view__time-value">{{ field.value }}</span>
+      <!-- 右栏 - 解码结果 -->
+      <NeuCard v-if="decodeResult" title="解码结果" elevation="raised" class="jwt-parser-view__output-card">
+        <NeuTabs v-model="activeTab" :tabs="tabOptions" />
+        <div class="jwt-parser-view__tab-content">
+          <!-- Header -->
+          <div v-show="activeTab === 'header'" class="jwt-parser-view__tab-pane">
+            <div class="jwt-parser-view__code-block">
+              <pre>{{ formatJson(decodeResult.header) }}</pre>
+            </div>
+            <div class="jwt-parser-view__copy-row">
+              <CopyButton :content="formatJson(decodeResult.header)" />
             </div>
           </div>
-          <div class="jwt-parser-view__copy-row">
-            <CopyButton :content="formatJson(decodeResult.payload)" />
-          </div>
-        </div>
 
-        <!-- Signature -->
-        <div v-show="activeTab === 'signature'">
-          <div class="jwt-parser-view__code-block">
-            <pre>{{ decodeResult.signature }}</pre>
+          <!-- Payload -->
+          <div v-show="activeTab === 'payload'" class="jwt-parser-view__tab-pane">
+            <div class="jwt-parser-view__code-block">
+              <pre>{{ formatJson(decodeResult.payload) }}</pre>
+            </div>
+            <div v-if="payloadTimeFields.length > 0" class="jwt-parser-view__time-info">
+              <div v-for="field in payloadTimeFields" :key="field.key" class="jwt-parser-view__time-item">
+                <span class="jwt-parser-view__time-label">{{ field.label }}</span>
+                <span class="jwt-parser-view__time-value">{{ field.value }}</span>
+              </div>
+            </div>
+            <div class="jwt-parser-view__copy-row">
+              <CopyButton :content="formatJson(decodeResult.payload)" />
+            </div>
           </div>
-          <div class="jwt-parser-view__copy-row">
-            <CopyButton :content="decodeResult.signature" />
-          </div>
-        </div>
-      </div>
-    </NeuCard>
 
-    <!-- 区块4: 签名验证 -->
-    <NeuCard elevation="raised" title="签名验证（可选）">
-      <div class="jwt-parser-view__verify-form">
-        <div class="jwt-parser-view__form-row">
-          <label class="jwt-parser-view__label">算法</label>
-          <NeuSelect v-model="algorithm" :options="algorithmOptions" />
-        </div>
-        <div class="jwt-parser-view__form-row">
-          <label class="jwt-parser-view__label">密钥</label>
-          <div class="jwt-parser-view__secret-input">
-            <NeuInput
-              v-model="secret"
-              :type="showSecret ? 'text' : 'password'"
-              placeholder="输入密钥 Secret"
-            />
-            <NeuButton size="sm" @click="showSecret = !showSecret">
-              {{ showSecret ? '隐藏' : '显示' }}
-            </NeuButton>
+          <!-- Signature -->
+          <div v-show="activeTab === 'signature'" class="jwt-parser-view__tab-pane">
+            <div class="jwt-parser-view__code-block">
+              <pre>{{ decodeResult.signature }}</pre>
+            </div>
+            <div class="jwt-parser-view__copy-row">
+              <CopyButton :content="decodeResult.signature" />
+            </div>
           </div>
         </div>
-        <NeuButton type="primary" :loading="isVerifying" @click="verifySignature">
-          验证签名
-        </NeuButton>
-        <p v-if="verifyError" class="jwt-parser-view__error">{{ verifyError }}</p>
-        <div v-if="verifyResult" class="jwt-parser-view__verify-result">
-          <NeuTag v-if="verifyResult.valid" type="success">✓ 签名有效</NeuTag>
-          <NeuTag v-else type="danger">✗ 签名无效</NeuTag>
-          <p v-if="verifyResult.error" class="jwt-parser-view__verify-msg">{{ verifyResult.error }}</p>
-        </div>
-      </div>
-    </NeuCard>
+      </NeuCard>
+      <NeuCard v-else elevation="raised" class="jwt-parser-view__output-card">
+        <div class="jwt-parser-view__placeholder">解码结果将在此显示...</div>
+      </NeuCard>
+    </div>
   </div>
 </template>
 
@@ -111,14 +95,11 @@ import { ref, computed, onMounted } from 'vue'
 import NeuCard from '@/components/neu/NeuCard.vue'
 import NeuButton from '@/components/neu/NeuButton.vue'
 import NeuTextarea from '@/components/neu/NeuTextarea.vue'
-import NeuInput from '@/components/neu/NeuInput.vue'
-import NeuSelect from '@/components/neu/NeuSelect.vue'
 import NeuTabs from '@/components/neu/NeuTabs.vue'
 import NeuTag from '@/components/neu/NeuTag.vue'
 import CopyButton from '@/components/common/CopyButton.vue'
 import { useJwtParse } from '@/composables/useJwtParse'
 import type { TabOption } from '@/components/neu/NeuTabs.vue'
-import type { SelectOption } from '@/components/neu/NeuSelect.vue'
 
 defineOptions({ name: 'JwtParserView' })
 
@@ -127,30 +108,17 @@ const {
   decodeResult,
   decodeError,
   isDecoding,
-  secret,
-  algorithm,
-  verifyResult,
-  verifyError,
-  isVerifying,
   decodeJwt,
-  verifySignature,
   loadPreferences,
   clear,
 } = useJwtParse()
 
 const activeTab = ref('header')
-const showSecret = ref(false)
 
 const tabOptions: TabOption[] = [
   { key: 'header', label: 'Header' },
   { key: 'payload', label: 'Payload' },
   { key: 'signature', label: 'Signature' },
-]
-
-const algorithmOptions: SelectOption[] = [
-  { label: 'HS256', value: 'HS256' },
-  { label: 'HS384', value: 'HS384' },
-  { label: 'HS512', value: 'HS512' },
 ]
 
 // 时间戳字段映射
@@ -204,38 +172,155 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
-  max-width: 800px;
-  margin: 0 auto;
+  height: 100%;
 }
 
-.jwt-parser-view__actions {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-}
-
-.jwt-parser-view__error {
-  margin-top: var(--spacing-sm);
-  color: var(--color-error);
-  font-size: var(--font-size-sm);
-}
-
+/* 状态栏 */
 .jwt-parser-view__status {
+  flex-shrink: 0;
+}
+
+.jwt-parser-view__status :deep(.neu-card__body) {
+  min-height: 48px;
+  max-height: 60px;
+  overflow: hidden;
+}
+
+.jwt-parser-view__status-inner {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: var(--spacing-sm);
 }
 
+.jwt-parser-view__status-error {
+  display: flex;
+  align-items: center;
+}
+
+.jwt-parser-view__error-msg {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.jwt-parser-view__status-idle {
+  display: flex;
+  align-items: center;
+}
+
+.jwt-parser-view__idle-text {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* 双栏布局 */
+.jwt-parser-view__columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: var(--spacing-lg);
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 768px) {
+  .jwt-parser-view__columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 左右卡片 flex 填充 */
+.jwt-parser-view__input-card,
+.jwt-parser-view__output-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.jwt-parser-view__input-card :deep(.neu-card__body),
+.jwt-parser-view__output-card :deep(.neu-card__body) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.jwt-parser-view__input-card :deep(.neu-card__footer),
+.jwt-parser-view__output-card :deep(.neu-card__footer) {
+  flex-shrink: 0;
+}
+
+/* textarea 自适应 */
+.jwt-parser-view__textarea {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.jwt-parser-view__textarea :deep(.neu-textarea-wrapper) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.jwt-parser-view__textarea :deep(.neu-textarea-field) {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+  overflow-y: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: var(--font-size-sm);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.jwt-parser-view__textarea :deep(.neu-textarea-field)::-webkit-scrollbar {
+  display: none;
+}
+
+/* 操作按钮 */
+.jwt-parser-view__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* 右栏 tab 内容 */
 .jwt-parser-view__tab-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   margin-top: var(--spacing-md);
 }
 
+.jwt-parser-view__tab-pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .jwt-parser-view__code-block {
+  flex: 1;
+  min-height: 0;
   background: var(--neu-bg);
   border-radius: var(--neu-radius-sm);
   box-shadow: var(--neu-shadow-pressed);
   padding: var(--spacing-md);
-  overflow-x: auto;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.jwt-parser-view__code-block::-webkit-scrollbar {
+  display: none;
 }
 
 .jwt-parser-view__code-block pre {
@@ -252,6 +337,7 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   margin-top: var(--spacing-sm);
+  flex-shrink: 0;
 }
 
 .jwt-parser-view__time-info {
@@ -260,6 +346,7 @@ onMounted(() => {
   background: var(--neu-bg);
   border-radius: var(--neu-radius-sm);
   box-shadow: var(--neu-shadow-pressed);
+  flex-shrink: 0;
 }
 
 .jwt-parser-view__time-item {
@@ -286,41 +373,12 @@ onMounted(() => {
   font-family: 'Fira Code', 'Cascadia Code', monospace;
 }
 
-.jwt-parser-view__verify-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.jwt-parser-view__form-row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.jwt-parser-view__label {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.jwt-parser-view__secret-input {
+.jwt-parser-view__placeholder {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.jwt-parser-view__verify-result {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-wrap: wrap;
-}
-
-.jwt-parser-view__verify-msg {
-  width: 100%;
-  margin-top: var(--spacing-xs);
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
 }
 </style>
