@@ -99,7 +99,7 @@
         </p>
         <div class="settings-view__row">
           <label class="settings-view__label">许可证</label>
-          <span class="settings-view__info">MIT License</span>
+          <span class="settings-view__info">Apache-2.0</span>
         </div>
         <div class="settings-view__row">
           <label class="settings-view__label">版权声明</label>

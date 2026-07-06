@@ -1,3 +1,12 @@
 pub mod time_convert;
 pub mod json_format;
 pub mod jwt_parse;
+pub mod base64_codec;
+pub mod color_converter;
+pub mod uuid_generator;
+pub mod url_codec;
+pub mod hash_calculator;
+pub mod cron_parser;
+pub mod text_diff;
+pub mod regex_tester;
+pub mod http_client;

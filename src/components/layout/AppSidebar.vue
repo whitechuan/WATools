@@ -1,7 +1,7 @@
 <template>
   <aside class="app-sidebar neu-raised">
     <div class="app-sidebar__brand">
-      <span class="app-sidebar__logo">🧰</span>
+      <span class="app-sidebar__logo"><img src="/logo.png" alt="WATools" width="32" height="32" ></span>
       <span class="app-sidebar__title">WATools</span>
     </div>
 
@@ -45,11 +45,11 @@ const route = useRoute()
   width: 220px;
   flex-shrink: 0;
   height: 100%;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   padding: var(--spacing-md);
-  gap: var(--spacing-md);
+  gap: 0;
+  border-radius: 0;
 }
 
 .app-sidebar__brand {
@@ -57,6 +57,11 @@ const route = useRoute()
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-sm);
+  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
 }
 
 .app-sidebar__logo {
@@ -74,10 +79,22 @@ const route = useRoute()
   flex-direction: column;
   gap: var(--spacing-sm);
   flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: var(--spacing-xs) 0;
+}
+
+.app-sidebar__nav::-webkit-scrollbar {
+  display: none;
 }
 
 .app-sidebar__footer {
-  margin-top: auto;
+  flex-shrink: 0;
+  padding-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .app-sidebar__item {

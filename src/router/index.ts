@@ -27,6 +27,60 @@ const router = createRouter({
           name: 'JwtParser',
           component: () => import('@/views/tools/JwtParserView.vue'),
           meta: { title: 'JWT解析', icon: '🔑' }
+        },
+        {
+          path: 'hash-calculator',
+          name: 'HashCalculator',
+          component: () => import('@/views/tools/HashCalculatorView.vue'),
+          meta: { title: 'Hash计算器', icon: '#️⃣' }
+        },
+        {
+          path: 'url-codec',
+          name: 'UrlCodec',
+          component: () => import('@/views/tools/UrlCodecView.vue'),
+          meta: { title: 'URL编解码', icon: '🔗' }
+        },
+        {
+          path: 'text-diff',
+          name: 'TextDiff',
+          component: () => import('@/views/tools/TextDiffView.vue'),
+          meta: { title: '文本Diff', icon: '📝' }
+        },
+        {
+          path: 'uuid-generator',
+          name: 'UuidGenerator',
+          component: () => import('@/views/tools/UuidGeneratorView.vue'),
+          meta: { title: 'UUID生成器', icon: '🆔' }
+        },
+        {
+          path: 'color-converter',
+          name: 'ColorConverter',
+          component: () => import('@/views/tools/ColorConverterView.vue'),
+          meta: { title: '颜色转换', icon: '🎨' }
+        },
+        {
+          path: 'regex-tester',
+          name: 'RegexTester',
+          component: () => import('@/views/tools/RegexTesterView.vue'),
+          meta: { title: '正则测试器', icon: '🎯' }
+        },
+        {
+          path: 'base64-codec',
+          name: 'Base64Codec',
+          component: () => import('@/views/tools/Base64CodecView.vue'),
+          meta: { title: 'Base64编解码', icon: '🔤' }
+        },
+        {
+          path: 'cron-parser',
+          name: 'CronParser',
+          component: () => import('@/views/tools/CronParserView.vue'),
+          meta: { title: 'Cron解析器', icon: '⏲️' }
+        },
+        {
+          path: 'http-client',
+          name: 'HttpClient',
+          component: () => import('@/views/tools/HttpClientView.vue'),
+          meta: { title: 'HTTP请求器', icon: '🌐' }
         }
       ]
     },

@@ -63,3 +63,103 @@ export interface ToolDescriptor {
   path: string
   description: string
 }
+
+// ===== Base64 编解码 =====
+export interface Base64Result {
+  output: string
+  size_before: number
+  size_after: number
+}
+
+// ===== Hash 计算器 =====
+export interface HashResult {
+  md5: string
+  sha1: string
+  sha256: string
+  sha512: string
+}
+
+// ===== URL 编解码 =====
+export interface UrlEncodeResult {
+  encoded: string
+}
+
+export interface UrlDecodeResult {
+  decoded: string
+}
+
+export interface UrlParseResult {
+  scheme: string
+  host: string
+  port: string
+  path: string
+  query: string
+  fragment: string
+  query_params: Array<{ key: string; value: string }>
+}
+
+// ===== UUID 生成器 =====
+export interface UuidResult {
+  values: string[]
+  version: string
+}
+
+// ===== 正则测试器 =====
+export interface RegexMatch {
+  text: string
+  start: number
+  end: number
+  groups: Array<{ name: string | null; value: string }>
+}
+
+export interface RegexResult {
+  is_valid: boolean
+  matches: RegexMatch[]
+  match_count: number
+  error: string | null
+}
+
+// ===== 颜色转换器 =====
+export interface ColorResult {
+  hex: string
+  rgb: { r: number; g: number; b: number }
+  hsl: { h: number; s: number; l: number }
+  rgba: string
+  hsla: string
+}
+
+// ===== Cron 解析器 =====
+export interface CronResult {
+  is_valid: boolean
+  description: string
+  next_runs: string[]
+  error: string | null
+}
+
+// ===== 文本 Diff =====
+export interface DiffLine {
+  tag: 'equal' | 'insert' | 'delete'
+  old_index: number | null
+  new_index: number | null
+  value: string
+}
+
+export interface DiffResult {
+  lines: DiffLine[]
+  stats: { additions: number; deletions: number; unchanged: number }
+}
+
+// ===== HTTP 请求器 =====
+export interface HttpHeader {
+  key: string
+  value: string
+}
+
+export interface HttpResponse {
+  status: number
+  status_text: string
+  headers: HttpHeader[]
+  body: string
+  elapsed_ms: number
+  size_bytes: number
+}
