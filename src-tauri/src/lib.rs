@@ -1,10 +1,79 @@
 pub mod commands;
 
+use tauri::{
+    tray::{TrayIconBuilder, MouseButton, MouseButtonState, TrayIconEvent},
+    menu::{Menu, MenuItem},
+    Manager,
+};
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_sql::Builder::new().build())
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
+        .setup(|app| {
+            // 获取主窗口引用
+            let window = app.get_webview_window("main").unwrap();
+            let win = window.clone();
+
+            // 关闭窗口时最小化到托盘
+            window.on_window_event(move |event| {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                    api.prevent_close();
+                    let _ = win.hide();
+                }
+            });
+
+            // 创建托盘菜单
+            let show_item = MenuItem::with_id(app, "show", "显示窗口", true, None::<&str>)?;
+            let hide_item = MenuItem::with_id(app, "hide", "隐藏窗口", true, None::<&str>)?;
+            let quit_item = MenuItem::with_id(app, "quit", "退出", true, None::<&str>)?;
+
+            let menu = Menu::with_items(app, &[&show_item, &hide_item, &quit_item])?;
+
+            // 构建系统托盘
+            let _tray = TrayIconBuilder::new()
+                .icon(app.default_window_icon().unwrap().clone())
+                .menu(&menu)
+                .on_menu_event(move |app, event| {
+                    let window = app.get_webview_window("main").unwrap();
+                    match event.id.as_ref() {
+                        "show" => {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                        "hide" => {
+                            let _ = window.hide();
+                        }
+                        "quit" => {
+                            app.exit(0);
+                        }
+                        _ => {}
+                    }
+                })
+                .on_tray_icon_event(move |tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            if window.is_visible().unwrap_or(false) {
+                                let _ = window.hide();
+                            } else {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                            }
+                        }
+                    }
+                })
+                .build(app)?;
+
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             commands::time_convert::convert_time,
             commands::time_convert::get_current_time,

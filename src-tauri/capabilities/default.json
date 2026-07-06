@@ -10,6 +10,8 @@
     "sql:allow-load",
     "sql:allow-execute",
     "sql:allow-select",
-    "sql:allow-close"
+    "sql:allow-close",
+    "global-shortcut:allow-register",
+    "global-shortcut:allow-unregister"
   ]
 }

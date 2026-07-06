@@ -12,9 +12,9 @@
     "windows": [
       {
         "title": "WATools - 开发者工具箱",
-        "width": 1200,
+        "width": 1280,
         "height": 800,
-        "resizable": true,
+        "resizable": false,
         "decorations": true
       }
     ],
