@@ -145,9 +145,17 @@
 
 | 阶段 | 目标 | 状态 |
 |------|------|------|
+| 短期 | 配置 Windows 安装包生成（NSIS + WiX/MSI） | 已完成 |
 | 短期 | 配置 GitHub Actions 自动构建 | 未开始 |
 | 中期 | 接入自动更新（tauri-updater） | 未开始 |
 | 长期 | 建立应用商店分发渠道（Microsoft Store、Mac App Store） | 未开始 |
+
+#### 构建环境依赖
+
+| 工具 | 用途 | 安装命令 |
+|------|------|----------|
+| WiX Toolset v3.14 | 生成 MSI 安装包 | `winget install FireGiant.WiX --version 3.14.1` |
+| NSIS | 生成 .exe 安装程序 | Tauri 自动下载，无需手动安装 |
 
 ---
 
@@ -209,6 +217,7 @@
 - [x] 中英双语 README 重构（AtomCode 风格）
 - [x] 项目许可证确定为 Apache License 2.0
 - [x] 标准化 .gitignore 配置
+- [x] Windows 安装包生成配置（NSIS .exe + WiX .msi 双输出）
 
 ---
 

@@ -12,7 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, nextTick } from 'vue'
+import { getCurrentWindow } from '@tauri-apps/api/window'
 import { useTheme } from '@/composables/useTheme'
 import AppSidebar from '@/components/layout/AppSidebar.vue'
 import { initShortcuts, cleanupShortcuts } from '@/utils/shortcuts'
@@ -22,6 +23,11 @@ const { loadTheme } = useTheme()
 onMounted(async () => {
   loadTheme()
   await initShortcuts()
+  // 等待下一帧确保 DOM 已渲染，然后显示窗口
+  await nextTick()
+  const appWindow = getCurrentWindow()
+  await appWindow.show()
+  await appWindow.setFocus()
 })
 
 onUnmounted(() => {
