@@ -148,4 +148,4 @@ JWT 解析工具通过三段式 Tab 展示、智能时间戳转换和过期状�
 
 > 📖 其他工具指南：[JSON 格式化](./08-JSON格式化工具完全指南.md) | [时间转换](./09-时间转换工具完全指南.md) | [主题配置](./11-主题切换与个性化配置.md)
 >
-> ⭐ 觉得好用？来 [GitCode](https://gitcode.com/white_chuan/WATools) 点个 Star 支持一下！
+> ⭐ 觉得好用？来 [GitHub](https://github.com/whitechuan/WATools) / [GitCode](https://gitcode.com/white_chuan/WATools) 点个 Star 支持一下！

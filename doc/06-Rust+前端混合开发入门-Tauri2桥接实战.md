@@ -234,4 +234,4 @@ Rust + 前端混合开发并不复杂：
 - **Rust 工程师**不需要学 Vue，只需提供干净的命令接口
 - **Tauri 2** 负责把两者桥接起来，IPC 通信透明高效
 
-WATools 的源码就是一个完整的参考实现，来 [GitCode](https://gitcode.com/white_chuan/WATools) Star 一下，开始你的混合开发之旅！
+WATools 的源码就是一个完整的参考实现，来 [GitHub](https://github.com/whitechuan/WATools) / [GitCode](https://gitcode.com/white_chuan/WATools) Star 一下，开始你的混合开发之旅！

@@ -187,4 +187,4 @@ JWT 解析看似简单（Base64 解码 + JSON 解析），但在实际开发中�
 2. **安全意识**：敏感 Token 不要发送到在线工具
 3. **本地优先**：用 WATools 这样的本地工具，数据不出你的电脑
 
-想查看完整的 JWT 解析实现源码？来 [GitCode](https://gitcode.com/white_chuan/WATools) Star 一下项目，获取全部源码！
+想查看完整的 JWT 解析实现源码？来 [GitHub](https://github.com/whitechuan/WATools) / [GitCode](https://gitcode.com/white_chuan/WATools) Star 一下项目，获取全部源码！

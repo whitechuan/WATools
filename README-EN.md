@@ -24,6 +24,7 @@
 ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 [![GitCode Stars](https://img.shields.io/badge/GitCode-⭐%20Star-orange)](https://gitcode.com/white_chuan/WATools)
 [![AtomGitStars](https://atomgit.com/white_chuan/WATools/star/badge.svg)](https://atomgit.com/white_chuan/WATools)
+[![GitHub Stars](https://img.shields.io/github/stars/whitechuan/WATools?style=social)](https://github.com/whitechuan/WATools)
 
 > 💖 If this project helps you, please **⭐ Star** it to support continuous development!
 
@@ -189,6 +190,6 @@ This project is open source under the [Apache License 2.0](./LICENSE).
 
 **If WATools helps you, please ⭐ Star to support!**
 
-[🔗 GitCode](https://gitcode.com/white_chuan/WATools)
+[🔗 GitCode](https://gitcode.com/white_chuan/WATools) | [🔗 GitHub](https://github.com/whitechuan/WATools)
 
 </div>

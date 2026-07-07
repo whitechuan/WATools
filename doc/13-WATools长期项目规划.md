@@ -225,6 +225,6 @@
 
 **WATools 的长期路径：从工具箱到平台，从单点到生态。**
 
-如果这个项目对你有启发，请 ⭐ [Star 支持](https://gitcode.com/white_chuan/WATools)！
+如果这个项目对你有启发，请 ⭐ [Star 支持](https://github.com/whitechuan/WATools)（[GitCode 镜像](https://gitcode.com/white_chuan/WATools)）！
 
 </div>

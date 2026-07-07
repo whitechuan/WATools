@@ -162,4 +162,4 @@ components/neu/
 
 新拟态不是万能的设计风格，但对于工具类应用来说，它能提供一种**精致而不花哨**的视觉体验。
 
-WATools 的完整组件库源码已开源，欢迎来 [GitCode](https://gitcode.com/white_chuan/WATools) 查看和参考。觉得有帮助的话，点个 Star 支持一下！
+WATools 的完整组件库源码已开源，欢迎来 [GitHub](https://github.com/whitechuan/WATools) / [GitCode](https://gitcode.com/white_chuan/WATools) 查看和参考。觉得有帮助的话，点个 Star 支持一下！

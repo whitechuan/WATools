@@ -147,4 +147,4 @@ pnpm tauri dev
 - [JWT 解析工具使用指南](./10-JWT解析工具使用指南.md)
 - [主题切换与个性化配置](./11-主题切换与个性化配置.md)
 
-觉得 WATools 好用？来 [GitCode](https://gitcode.com/white_chuan/WATools) 点个 ⭐ Star，支持开源！
+觉得 WATools 好用？来 [GitHub](https://github.com/whitechuan/WATools) / [GitCode](https://gitcode.com/white_chuan/WATools) 点个 ⭐ Star，支持开源！

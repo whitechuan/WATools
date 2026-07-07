@@ -153,4 +153,4 @@ Tauri 2 + Vue 3 是目前构建轻量级桌面工具应用的最佳组合之一�
 - **Rust 后端** 保证性能和安全
 - **Tauri 2** 把两者优雅地桥接在一起
 
-如果你也想做一个自己的桌面工具，不妨从 [WATools](https://gitcode.com/white_chuan/WATools) 的源码开始参考，Star 一下支持开源！
+如果你也想做一个自己的桌面工具，不妨从 [WATools](https://github.com/whitechuan/WATools)（[GitCode 镜像](https://gitcode.com/white_chuan/WATools)）的源码开始参考，Star 一下支持开源！

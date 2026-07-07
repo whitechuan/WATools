@@ -163,4 +163,4 @@ WATools 虽然看起来简洁，但细节满满。从状态栏的统计信息到
 
 > 📖 完整使用指南系列：[安装上手](./07-WATools安装与快速上手指南.md) | [JSON 格式化](./08-JSON格式化工具完全指南.md) | [时间转换](./09-时间转换工具完全指南.md) | [JWT 解析](./10-JWT解析工具使用指南.md) | [主题配置](./11-主题切换与个性化配置.md)
 >
-> ⭐ 觉得 WATools 好用？来 [GitCode](https://gitcode.com/white_chuan/WATools) 点个 Star，让更多人发现这个宝藏工具箱！
+> ⭐ 觉得 WATools 好用？来 [GitHub](https://github.com/whitechuan/WATools) / [GitCode](https://gitcode.com/white_chuan/WATools) 点个 Star，让更多人发现这个宝藏工具箱！
