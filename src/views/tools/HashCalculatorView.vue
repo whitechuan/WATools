@@ -37,26 +37,28 @@
 
       <!-- 右栏 - 结果区 -->
       <div class="hash-calculator-view__output-area">
-        <template v-if="result">
-          <NeuCard
-            v-for="algo in algorithms"
-            :key="algo.key"
-            :title="algo.label"
-            elevation="raised"
-            class="hash-calculator-view__result-card"
-          >
-            <div class="hash-calculator-view__hash-value">
-              {{ result[algo.key as keyof HashResult] }}
+        <NeuCard
+          v-for="algo in algorithms"
+          :key="algo.key"
+          elevation="raised"
+          class="hash-calculator-view__result-card"
+        >
+          <template #header>
+            <div class="hash-calculator-view__card-header">
+              <h3 class="neu-card__title">{{ algo.label }}</h3>
+              <CopyButton :content="result ? result[algo.key as keyof HashResult] : ''" />
             </div>
-            <template #footer>
-              <div class="hash-calculator-view__copy-row">
-                <CopyButton :content="result[algo.key as keyof HashResult]" />
-              </div>
+          </template>
+          <div
+            class="hash-calculator-view__hash-value"
+            :class="{ 'hash-calculator-view__hash-value--clickable': result?.[algo.key as keyof HashResult] }"
+            @click="copyValue(result?.[algo.key as keyof HashResult] || '')"
+          >
+            <template v-if="result">
+              {{ result[algo.key as keyof HashResult] }}
             </template>
-          </NeuCard>
-        </template>
-        <NeuCard v-else elevation="raised" class="hash-calculator-view__placeholder-card">
-          <div class="hash-calculator-view__placeholder">计算结果将在此显示...</div>
+            <span v-else class="hash-calculator-view__placeholder">等待计算...</span>
+          </div>
         </NeuCard>
       </div>
     </div>
@@ -81,6 +83,20 @@ const algorithms = [
   { key: 'sha256', label: 'SHA-256' },
   { key: 'sha512', label: 'SHA-512' },
 ]
+
+async function copyValue(text: string) {
+  if (!text) return
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch {
+    const textarea = document.createElement('textarea')
+    textarea.value = text
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+  }
+}
 </script>
 
 <style scoped>
@@ -207,6 +223,7 @@ const algorithms = [
   gap: var(--spacing-md);
   min-height: 0;
   overflow-y: auto;
+  padding: var(--spacing-sm);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -236,29 +253,35 @@ const algorithms = [
   padding: var(--spacing-sm) var(--spacing-md);
 }
 
-.hash-calculator-view__copy-row {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 占位卡片 */
-.hash-calculator-view__placeholder-card {
-  flex: 1;
+/* 卡片头部 */
+.hash-calculator-view__card-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 200px;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
 }
 
-.hash-calculator-view__placeholder-card :deep(.neu-card__body) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+.hash-calculator-view__card-header :deep(.copy-button) {
+  padding: 4px 10px;
+  font-size: var(--font-size-sm);
+}
+
+/* 点击复制 */
+.hash-calculator-view__hash-value--clickable {
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast);
+}
+
+.hash-calculator-view__hash-value--clickable:hover {
+  box-shadow: var(--neu-shadow-pressed), 0 0 0 2px rgba(108, 99, 255, 0.15);
+}
+
+.hash-calculator-view__hash-value--clickable:active {
+  opacity: 0.85;
 }
 
 .hash-calculator-view__placeholder {
   color: var(--text-muted);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
 }
 </style>
