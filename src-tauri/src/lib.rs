@@ -94,6 +94,17 @@ pub fn run() {
             commands::regex_tester::test_regex,
             commands::cron_parser::parse_cron,
             commands::http_client::send_http_request,
+            commands::html_entity::html_entity_encode,
+            commands::html_entity::html_entity_decode,
+            commands::base32_codec::base32_encode,
+            commands::base32_codec::base32_decode,
+            commands::text_stats::text_statistics,
+            commands::text_stats::text_process,
+            commands::ascii_convert::ascii_to_text,
+            commands::ascii_convert::text_to_ascii,
+            commands::ascii_convert::text_to_hex_ascii,
+            commands::markdown_preview::markdown_to_html,
+            commands::number_base::number_base_convert,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

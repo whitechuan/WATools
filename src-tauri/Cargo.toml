@@ -37,3 +37,6 @@ regex = "1"
 cron = "0.12"
 similar = "2"
 reqwest = { version = "0.12", features = ["json", "blocking"] }
+base32 = "0.5"
+html-escape = "0.2"
+pulldown-cmark = "0.10"

@@ -1,25 +1,16 @@
 import { register } from '@tauri-apps/plugin-global-shortcut'
 import router from '@/router'
+import { TOOL_REGISTRY } from '@/utils/toolRegistry'
 
-// 工具路由列表（按侧边栏顺序）
-const toolRoutes = [
-  '/tools/time-converter',
-  '/tools/json-formatter',
-  '/tools/jwt-parser',
-  '/tools/hash-calculator',
-  '/tools/url-codec',
-  '/tools/text-diff',
-  '/tools/uuid-generator',
-  '/tools/color-converter',
-  '/tools/regex-tester',
-]
+// 从注册表动态获取路由
+const toolRoutes = TOOL_REGISTRY.map(tool => tool.path)
 
 /**
  * 初始化全局快捷键
  */
 export async function initShortcuts() {
-  // Ctrl+1 ~ Ctrl+9: 快速切换工具
-  for (let i = 0; i < toolRoutes.length; i++) {
+  // Ctrl+1 ~ Ctrl+9: 快速切换前9个工具
+  for (let i = 0; i < Math.min(9, toolRoutes.length); i++) {
     const shortcut = `CommandOrControl+${i + 1}`
     const route = toolRoutes[i]
     await register(shortcut, () => {

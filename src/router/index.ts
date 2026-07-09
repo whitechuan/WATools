@@ -81,6 +81,42 @@ const router = createRouter({
           name: 'HttpClient',
           component: () => import('@/views/tools/HttpClientView.vue'),
           meta: { title: 'HTTP请求器', icon: '🌐' }
+        },
+        {
+          path: 'html-entity',
+          name: 'HtmlEntity',
+          component: () => import('@/views/tools/HtmlEntityView.vue'),
+          meta: { title: 'HTML实体编解码', icon: '🏷️' }
+        },
+        {
+          path: 'base32-codec',
+          name: 'Base32Codec',
+          component: () => import('@/views/tools/Base32CodecView.vue'),
+          meta: { title: 'Base32编解码', icon: '🔡' }
+        },
+        {
+          path: 'text-stats',
+          name: 'TextStats',
+          component: () => import('@/views/tools/TextStatsView.vue'),
+          meta: { title: '文本统计/处理', icon: '📊' }
+        },
+        {
+          path: 'ascii-convert',
+          name: 'AsciiConvert',
+          component: () => import('@/views/tools/AsciiConvertView.vue'),
+          meta: { title: 'ASCII转换', icon: '🔢' }
+        },
+        {
+          path: 'markdown-preview',
+          name: 'MarkdownPreview',
+          component: () => import('@/views/tools/MarkdownPreviewView.vue'),
+          meta: { title: 'Markdown预览', icon: '📖' }
+        },
+        {
+          path: 'number-base',
+          name: 'NumberBase',
+          component: () => import('@/views/tools/NumberBaseView.vue'),
+          meta: { title: '进制转换', icon: '🧮' }
         }
       ]
     },

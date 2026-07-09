@@ -6,16 +6,19 @@
     </div>
 
     <nav class="app-sidebar__nav">
-      <RouterLink
-        v-for="tool in TOOL_REGISTRY"
-        :key="tool.id"
-        :to="tool.path"
-        class="app-sidebar__item"
-        :class="{ 'app-sidebar__item--active': route.path === tool.path }"
-      >
-        <span class="app-sidebar__icon">{{ tool.icon }}</span>
-        <span class="app-sidebar__name">{{ tool.name }}</span>
-      </RouterLink>
+      <template v-for="group in groupedTools" :key="group.category.id">
+        <div class="app-sidebar__group-label">{{ group.category.label }}</div>
+        <RouterLink
+          v-for="tool in group.tools"
+          :key="tool.id"
+          :to="tool.path"
+          class="app-sidebar__item"
+          :class="{ 'app-sidebar__item--active': route.path === tool.path }"
+        >
+          <span class="app-sidebar__icon">{{ tool.icon }}</span>
+          <span class="app-sidebar__name">{{ tool.name }}</span>
+        </RouterLink>
+      </template>
     </nav>
 
     <div class="app-sidebar__footer">
@@ -33,11 +36,12 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { TOOL_REGISTRY } from '@/utils/toolRegistry'
+import { getGroupedTools } from '@/utils/toolRegistry'
 
 defineOptions({ name: 'AppSidebar' })
 
 const route = useRoute()
+const groupedTools = getGroupedTools()
 </script>
 
 <style scoped>
@@ -123,6 +127,20 @@ const route = useRoute()
 .app-sidebar__item--active:hover {
   box-shadow: var(--neu-shadow-pressed);
   transform: none;
+}
+
+.app-sidebar__group-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: var(--spacing-xs) var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  font-weight: 600;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
+.app-sidebar__group-label:first-child {
+  margin-top: 0;
 }
 
 .app-sidebar__icon {

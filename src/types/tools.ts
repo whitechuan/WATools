@@ -55,6 +55,16 @@ export interface HistoryEntry {
   created_at: string
 }
 
+// 工具分类
+export type ToolCategory = 'time' | 'format' | 'encoding' | 'text' | 'generator' | 'network'
+
+export interface ToolCategoryMeta {
+  id: ToolCategory
+  label: string
+  icon: string
+  order: number
+}
+
 // 工具描述
 export interface ToolDescriptor {
   id: string
@@ -62,6 +72,7 @@ export interface ToolDescriptor {
   icon: string
   path: string
   description: string
+  category: ToolCategory
 }
 
 // ===== Base64 编解码 =====
@@ -162,4 +173,37 @@ export interface HttpResponse {
   body: string
   elapsed_ms: number
   size_bytes: number
+}
+
+// ===== HTML实体编解码 =====
+export interface HtmlEntityResult {
+  output: string
+}
+
+// ===== Base32编解码 =====
+export interface Base32Result {
+  output: string
+}
+
+// ===== 文本统计 =====
+export interface TextStatsResult {
+  characters: number
+  characters_no_space: number
+  words: number
+  lines: number
+  paragraphs: number
+  bytes: number
+}
+
+// ===== ASCII码转换 =====
+export interface AsciiResult {
+  output: string
+}
+
+// ===== 进制转换器 =====
+export interface NumberBaseResult {
+  binary: string
+  octal: string
+  decimal: string
+  hex: string
 }
