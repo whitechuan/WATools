@@ -80,6 +80,12 @@ Dev server runs at `http://localhost:5173`. Press `F12` to open DevTools.
 | 🔤 Base64 Codec | Base64 encoding & decoding |
 | ⏲️ Cron Parser | Parse cron expressions |
 | 🌐 HTTP Client | Send & inspect HTTP requests |
+| 🔡 Base32 Codec | Base32 encoding & decoding |
+| 🏷️ HTML Entity Codec | HTML entity encoding & decoding |
+| 🔢 ASCII Converter | ASCII code & text conversion with hex reference |
+| 📖 Markdown Preview | Live preview Markdown, export HTML |
+| 📊 Text Stats & Process | Word count + case conversion + dedup/sort/trim |
+| 🧮 Number Base Converter | Binary/Octal/Decimal/Hexadecimal conversion |
 
 ### Highlights
 
@@ -129,10 +135,10 @@ WATools/
 │   ├── styles/themes/            # Theme files
 │   ├── types/                    # TypeScript definitions
 │   ├── utils/                    # Utilities
-│   └── views/tools/              # Tool views (12 tools)
+│   └── views/tools/              # Tool views (18 tools)
 ├── src-tauri/                    # Rust backend
 │   └── src/commands/             # Tauri commands
-├── doc/                          # Documentation (12 articles)
+├── doc/                          # Documentation (19 articles)
 └── public/                       # Static assets
 ```
 
@@ -160,6 +166,12 @@ Documentation is available in the `doc/` directory, including guides and tutoria
 | [Theme & Settings Guide](./doc/11-主题切换与个性化配置.md) | Customization guide |
 | [Tips & Tricks](./doc/12-WATools高效使用技巧合集.md) | 20 productivity tips |
 | [Long-term Roadmap](./doc/13-WATools长期项目规划.md) | Three-stage evolution roadmap |
+| [Base32 Codec Guide](./doc/14-Base32编解码工具使用指南.md) | Base32 codec tutorial |
+| [HTML Entity Guide](./doc/15-HTML实体编解码工具使用指南.md) | HTML entity codec tutorial |
+| [ASCII Converter Guide](./doc/16-ASCII转换工具使用指南.md) | ASCII conversion tutorial |
+| [Markdown Preview Guide](./doc/17-Markdown预览工具使用指南.md) | Markdown preview & export tutorial |
+| [Text Stats Guide](./doc/18-文本统计处理工具使用指南.md) | Text stats & processing tutorial |
+| [Number Base Guide](./doc/19-进制转换工具使用指南.md) | Number base conversion tutorial |
 
 ## 🤝 Contributing
 

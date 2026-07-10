@@ -80,6 +80,12 @@ pnpm tauri build
 | 🔤 Base64 编解码 | Base64 编码与解码 |
 | ⏲️ Cron 解析器 | 解析 Cron 表达式，展示执行计划 |
 | 🌐 HTTP 请求器 | 发送 HTTP 请求并查看响应 |
+| 🔡 Base32 编解码 | Base32 编码与解码 |
+| 🏷️ HTML 实体编解码 | HTML 特殊字符与实体互转 |
+| 🔢 ASCII 转换 | ASCII 码与文本互转，附 Hex 对照 |
+| 📖 Markdown 预览 | 实时编辑预览 Markdown，导出 HTML |
+| 📊 文本统计/处理 | 字数统计 + 大小写转换 + 去重/排序/去空行 |
+| 🧮 进制转换 | 二/八/十/十六进制互转 |
 
 ### 核心特性
 
@@ -129,10 +135,10 @@ WATools/
 │   ├── styles/themes/            # 多主题样式文件
 │   ├── types/                    # TypeScript 类型定义
 │   ├── utils/                    # 工具函数
-│   └── views/tools/              # 工具页面视图（12 个工具）
+│   └── views/tools/              # 工具页面视图（18 个工具）
 ├── src-tauri/                    # Rust 后端
 │   └── src/commands/             # Tauri 命令
-├── doc/                          # 文档（12 篇文章）
+├── doc/                          # 文档（19 篇文章）
 └── public/                       # 静态资源
 ```
 
@@ -160,6 +166,12 @@ WATools/
 | [主题配置指南](./doc/11-主题切换与个性化配置.md) | 个性化设置详解 |
 | [高效技巧合集](./doc/12-WATools高效使用技巧合集.md) | 20 条提效技巧 |
 | [长期项目规划](./doc/13-WATools长期项目规划.md) | 项目三阶段演进路线图 |
+| [Base32 编解码指南](./doc/14-Base32编解码工具使用指南.md) | Base32 编解码使用教程 |
+| [HTML 实体编解码指南](./doc/15-HTML实体编解码工具使用指南.md) | HTML 实体编解码教程 |
+| [ASCII 转换指南](./doc/16-ASCII转换工具使用指南.md) | ASCII 码转换使用教程 |
+| [Markdown 预览指南](./doc/17-Markdown预览工具使用指南.md) | Markdown 预览与导出教程 |
+| [文本统计处理指南](./doc/18-文本统计处理工具使用指南.md) | 文本统计与处理教程 |
+| [进制转换指南](./doc/19-进制转换工具使用指南.md) | 进制转换使用教程 |
 
 ## 🤝 贡献指南
 
