@@ -86,6 +86,14 @@ Dev server runs at `http://localhost:5173`. Press `F12` to open DevTools.
 | 📖 Markdown Preview | Live preview Markdown, export HTML |
 | 📊 Text Stats & Process | Word count + case conversion + dedup/sort/trim |
 | 🧮 Number Base Converter | Binary/Octal/Decimal/Hexadecimal conversion |
+| **Security / Crypto** | |
+| 🔐 Hex Codec | Text & hexadecimal string conversion |
+| 🔏 HMAC Calculator | Compute HMAC-SHA256 / HMAC-SHA512 |
+| 🔒 Symmetric Encryption | AES-256-GCM / ChaCha20-Poly1305 encrypt & decrypt |
+| 🛡️ RSA Encryption | RSA key generation, encrypt/decrypt, sign/verify |
+| 🎲 Password Generator | Random password generation + zxcvbn strength check |
+| **Memo** | |
+| 🗄️ Password Vault | Local encrypted password manager (Argon2id + AES-256-GCM) |
 
 ### Highlights
 
@@ -109,6 +117,7 @@ Dev server runs at `http://localhost:5173`. Press `F12` to open DevTools.
 │  Tauri Commands · tauri-plugin-sql  │
 │  chrono · jsonwebtoken · reqwest    │
 │  sha2 · regex · uuid · similar      │
+│  aes-gcm · rsa · argon2 · hmac     │
 └─────────────────────────────────────┘
 ```
 
@@ -118,7 +127,7 @@ Dev server runs at `http://localhost:5173`. Press `F12` to open DevTools.
 
 ### Backend Stack (Rust)
 
-- [Tauri 2](https://tauri.app/) · [chrono](https://crates.io/crates/chrono) · [jsonwebtoken](https://crates.io/crates/jsonwebtoken) · [reqwest](https://crates.io/crates/reqwest) · [sha2](https://crates.io/crates/sha2) · [regex](https://crates.io/crates/regex) · [uuid](https://crates.io/crates/uuid) · [cron](https://crates.io/crates/cron) · [similar](https://crates.io/crates/similar)
+- [Tauri 2](https://tauri.app/) · [chrono](https://crates.io/crates/chrono) · [jsonwebtoken](https://crates.io/crates/jsonwebtoken) · [reqwest](https://crates.io/crates/reqwest) · [sha2](https://crates.io/crates/sha2) · [regex](https://crates.io/crates/regex) · [uuid](https://crates.io/crates/uuid) · [cron](https://crates.io/crates/cron) · [similar](https://crates.io/crates/similar) · [aes-gcm](https://crates.io/crates/aes-gcm) · [chacha20poly1305](https://crates.io/crates/chacha20poly1305) · [hmac](https://crates.io/crates/hmac) · [rsa](https://crates.io/crates/rsa) · [argon2](https://crates.io/crates/argon2) · [zeroize](https://crates.io/crates/zeroize)
 
 ## 📁 Project Structure
 
@@ -135,10 +144,10 @@ WATools/
 │   ├── styles/themes/            # Theme files
 │   ├── types/                    # TypeScript definitions
 │   ├── utils/                    # Utilities
-│   └── views/tools/              # Tool views (18 tools)
+│   └── views/tools/              # Tool views (24 tools)
 ├── src-tauri/                    # Rust backend
 │   └── src/commands/             # Tauri commands
-├── doc/                          # Documentation (19 articles)
+├── doc/                          # Documentation (25 articles)
 └── public/                       # Static assets
 ```
 
@@ -172,6 +181,12 @@ Documentation is available in the `doc/` directory, including guides and tutoria
 | [Markdown Preview Guide](./doc/17-Markdown预览工具使用指南.md) | Markdown preview & export tutorial |
 | [Text Stats Guide](./doc/18-文本统计处理工具使用指南.md) | Text stats & processing tutorial |
 | [Number Base Guide](./doc/19-进制转换工具使用指南.md) | Number base conversion tutorial |
+| [Hex Codec Guide](./doc/20-Hex编解码工具使用指南.md) | Hex codec tutorial |
+| [HMAC Calculator Guide](./doc/21-HMAC计算工具使用指南.md) | HMAC calculator tutorial |
+| [Symmetric Encryption Guide](./doc/22-对称加密工具使用指南.md) | Symmetric encryption tutorial |
+| [RSA Encryption Guide](./doc/23-RSA加密工具使用指南.md) | RSA encryption tutorial |
+| [Password Generator Guide](./doc/24-密码生成器使用指南.md) | Password generator tutorial |
+| [Password Vault Guide](./doc/25-密码库工具使用指南.md) | Password vault tutorial |
 
 ## 🤝 Contributing
 

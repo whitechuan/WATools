@@ -86,6 +86,14 @@ pnpm tauri build
 | 📖 Markdown 预览 | 实时编辑预览 Markdown，导出 HTML |
 | 📊 文本统计/处理 | 字数统计 + 大小写转换 + 去重/排序/去空行 |
 | 🧮 进制转换 | 二/八/十/十六进制互转 |
+| **安全/加密** | |
+| 🔐 Hex 编解码 | 文本与十六进制字符串互转 |
+| 🔏 HMAC 计算 | 计算 HMAC-SHA256 / HMAC-SHA512 |
+| 🔒 对称加密 | AES-256-GCM / ChaCha20-Poly1305 加密解密 |
+| 🛡️ RSA 加密 | RSA 密钥生成、公钥加密/私钥解密、数字签名 |
+| 🎲 密码生成器 | 随机密码生成 + zxcvbn 强度检测 |
+| **备忘录** | |
+| 🗄️ 密码库 | 本地加密密码管理器（Argon2id + AES-256-GCM） |
 
 ### 核心特性
 
@@ -109,6 +117,7 @@ pnpm tauri build
 │   Tauri Commands · tauri-plugin-sql  │
 │   chrono · jsonwebtoken · reqwest    │
 │   sha2 · regex · uuid · similar      │
+│   aes-gcm · rsa · argon2 · hmac     │
 └─────────────────────────────────────┘
 ```
 
@@ -118,7 +127,7 @@ pnpm tauri build
 
 ### 后端技术栈（Rust）
 
-- [Tauri 2](https://tauri.app/) · [chrono](https://crates.io/crates/chrono) · [jsonwebtoken](https://crates.io/crates/jsonwebtoken) · [reqwest](https://crates.io/crates/reqwest) · [sha2](https://crates.io/crates/sha2) · [regex](https://crates.io/crates/regex) · [uuid](https://crates.io/crates/uuid) · [cron](https://crates.io/crates/cron) · [similar](https://crates.io/crates/similar)
+- [Tauri 2](https://tauri.app/) · [chrono](https://crates.io/crates/chrono) · [jsonwebtoken](https://crates.io/crates/jsonwebtoken) · [reqwest](https://crates.io/crates/reqwest) · [sha2](https://crates.io/crates/sha2) · [regex](https://crates.io/crates/regex) · [uuid](https://crates.io/crates/uuid) · [cron](https://crates.io/crates/cron) · [similar](https://crates.io/crates/similar) · [aes-gcm](https://crates.io/crates/aes-gcm) · [chacha20poly1305](https://crates.io/crates/chacha20poly1305) · [hmac](https://crates.io/crates/hmac) · [rsa](https://crates.io/crates/rsa) · [argon2](https://crates.io/crates/argon2) · [zeroize](https://crates.io/crates/zeroize)
 
 ## 📁 项目结构
 
@@ -135,10 +144,10 @@ WATools/
 │   ├── styles/themes/            # 多主题样式文件
 │   ├── types/                    # TypeScript 类型定义
 │   ├── utils/                    # 工具函数
-│   └── views/tools/              # 工具页面视图（18 个工具）
+│   └── views/tools/              # 工具页面视图（24 个工具）
 ├── src-tauri/                    # Rust 后端
 │   └── src/commands/             # Tauri 命令
-├── doc/                          # 文档（19 篇文章）
+├── doc/                          # 文档（25 篇文章）
 └── public/                       # 静态资源
 ```
 
@@ -172,6 +181,12 @@ WATools/
 | [Markdown 预览指南](./doc/17-Markdown预览工具使用指南.md) | Markdown 预览与导出教程 |
 | [文本统计处理指南](./doc/18-文本统计处理工具使用指南.md) | 文本统计与处理教程 |
 | [进制转换指南](./doc/19-进制转换工具使用指南.md) | 进制转换使用教程 |
+| [Hex 编解码指南](./doc/20-Hex编解码工具使用指南.md) | Hex 编解码使用教程 |
+| [HMAC 计算指南](./doc/21-HMAC计算工具使用指南.md) | HMAC 计算使用教程 |
+| [对称加密指南](./doc/22-对称加密工具使用指南.md) | 对称加密使用教程 |
+| [RSA 加密指南](./doc/23-RSA加密工具使用指南.md) | RSA 加密使用教程 |
+| [密码生成器指南](./doc/24-密码生成器使用指南.md) | 密码生成器使用教程 |
+| [密码库指南](./doc/25-密码库工具使用指南.md) | 密码库使用教程 |
 
 ## 🤝 贡献指南
 
