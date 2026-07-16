@@ -44,6 +44,16 @@ pub fn aes_gcm_encrypt(plaintext: String, password: String) -> Result<SymmetricE
 
 #[command]
 pub fn aes_gcm_decrypt(ciphertext: String, nonce: String, password: String) -> Result<String, String> {
+    if ciphertext.trim().is_empty() {
+        return Err("请输入密文".to_string());
+    }
+    if nonce.trim().is_empty() {
+        return Err("请输入Nonce".to_string());
+    }
+    if password.trim().is_empty() {
+        return Err("请输入密码".to_string());
+    }
+
     let key_bytes = derive_key(&password);
     let key = GenericArray::from_slice(&key_bytes);
     let cipher = Aes256Gcm::new(key);
@@ -83,6 +93,16 @@ pub fn chacha20_encrypt(plaintext: String, password: String) -> Result<Symmetric
 
 #[command]
 pub fn chacha20_decrypt(ciphertext: String, nonce: String, password: String) -> Result<String, String> {
+    if ciphertext.trim().is_empty() {
+        return Err("请输入密文".to_string());
+    }
+    if nonce.trim().is_empty() {
+        return Err("请输入Nonce".to_string());
+    }
+    if password.trim().is_empty() {
+        return Err("请输入密码".to_string());
+    }
+
     use chacha20poly1305::aead::Aead as ChaChaAead;
 
     let key_bytes = derive_key(&password);

@@ -19,6 +19,10 @@ export function useSymmetricCrypto() {
   async function encrypt() {
     try {
       error.value = ''
+      if (!plaintext.value.trim() || !password.value.trim()) {
+        error.value = '请填写明文和密码'
+        return
+      }
       const cmd = algorithm.value === 'aes' ? 'aes_gcm_encrypt' : 'chacha20_encrypt'
       encryptResult.value = await invoke<SymmetricEncryptResult>(cmd, {
         plaintext: plaintext.value,
@@ -33,6 +37,10 @@ export function useSymmetricCrypto() {
   async function decrypt() {
     try {
       error.value = ''
+      if (!ciphertextInput.value.trim() || !nonceInput.value.trim() || !decryptPassword.value.trim()) {
+        error.value = '请填写密文、Nonce和密码'
+        return
+      }
       const cmd = decryptAlgorithm.value === 'aes' ? 'aes_gcm_decrypt' : 'chacha20_decrypt'
       decryptResult.value = await invoke<string>(cmd, {
         ciphertext: ciphertextInput.value,
