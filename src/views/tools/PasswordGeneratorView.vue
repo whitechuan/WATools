@@ -64,7 +64,7 @@
             <div class="password-generator-view__result-value">
               {{ generatedPassword }}
             </div>
-            <NeuButton size="small" @click="copyPassword">📋 复制</NeuButton>
+            <NeuButton size="sm" @click="copyPassword">📋 复制</NeuButton>
           </div>
         </div>
 
