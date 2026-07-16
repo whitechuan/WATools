@@ -108,6 +108,10 @@ pub fn run() {
             commands::hex_codec::hex_encode,
             commands::hex_codec::hex_decode,
             commands::hmac_calculator::calculate_hmac,
+            commands::symmetric_crypto::aes_gcm_encrypt,
+            commands::symmetric_crypto::aes_gcm_decrypt,
+            commands::symmetric_crypto::chacha20_encrypt,
+            commands::symmetric_crypto::chacha20_decrypt,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

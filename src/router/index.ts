@@ -129,6 +129,12 @@ const router = createRouter({
           name: 'HmacCalculator',
           component: () => import('@/views/tools/HmacCalculatorView.vue'),
           meta: { title: 'HMAC计算', icon: '🔐' }
+        },
+        {
+          path: 'symmetric-crypto',
+          name: 'SymmetricCrypto',
+          component: () => import('@/views/tools/SymmetricCryptoView.vue'),
+          meta: { title: '对称加密', icon: '🔒' }
         }
       ]
     },
