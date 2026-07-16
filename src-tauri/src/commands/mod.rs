@@ -19,3 +19,4 @@ pub mod number_base;
 pub mod hex_codec;
 pub mod hmac_calculator;
 pub mod symmetric_crypto;
+pub mod asymmetric_crypto;

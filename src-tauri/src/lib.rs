@@ -112,6 +112,11 @@ pub fn run() {
             commands::symmetric_crypto::aes_gcm_decrypt,
             commands::symmetric_crypto::chacha20_encrypt,
             commands::symmetric_crypto::chacha20_decrypt,
+            commands::asymmetric_crypto::rsa_generate_keypair,
+            commands::asymmetric_crypto::rsa_encrypt,
+            commands::asymmetric_crypto::rsa_decrypt,
+            commands::asymmetric_crypto::rsa_sign,
+            commands::asymmetric_crypto::rsa_verify,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

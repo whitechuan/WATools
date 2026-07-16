@@ -135,6 +135,12 @@ const router = createRouter({
           name: 'SymmetricCrypto',
           component: () => import('@/views/tools/SymmetricCryptoView.vue'),
           meta: { title: '对称加密', icon: '🔒' }
+        },
+        {
+          path: 'asymmetric-crypto',
+          name: 'AsymmetricCrypto',
+          component: () => import('@/views/tools/AsymmetricCryptoView.vue'),
+          meta: { title: 'RSA非对称加密', icon: '🔐' }
         }
       ]
     },
