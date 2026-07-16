@@ -56,7 +56,7 @@ export interface HistoryEntry {
 }
 
 // 工具分类
-export type ToolCategory = 'time' | 'format' | 'encoding' | 'text' | 'generator' | 'network' | 'security'
+export type ToolCategory = 'time' | 'format' | 'encoding' | 'text' | 'generator' | 'network' | 'security' | 'memo'
 
 export interface ToolCategoryMeta {
   id: ToolCategory
@@ -255,4 +255,37 @@ export interface GeneratePasswordOptions {
   lowercase: boolean
   digits: boolean
   symbols: boolean
+}
+
+// ===== 密码库 =====
+export interface VaultEntry {
+  id: number
+  title: string
+  username: string
+  password: string       // 解密后明文（仅前端运行时）
+  url: string
+  category: string
+  tags: string[]
+  notes: string
+  created_at: string
+  updated_at: string
+}
+
+export interface VaultEncryptedEntry {
+  id: number
+  title: string
+  username: string
+  password_encrypted: string  // AES-256-GCM 密文 Base64
+  nonce: string               // Base64
+  url: string
+  category: string
+  tags: string                // JSON 序列化
+  notes: string
+  created_at: string
+  updated_at: string
+}
+
+export interface VaultEncryptResult {
+  ciphertext: string
+  nonce: string
 }

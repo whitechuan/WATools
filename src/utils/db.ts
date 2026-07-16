@@ -44,4 +44,32 @@ async function runMigrations(db: Database) {
   // 创建索引
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_history_tool ON tool_history(tool_id)`)
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_history_time ON tool_history(created_at DESC)`)
+
+  // 密码库相关表
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS vault_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    )
+  `)
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS password_vault (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      username TEXT DEFAULT '',
+      password_encrypted TEXT NOT NULL,
+      nonce TEXT NOT NULL,
+      url TEXT DEFAULT '',
+      category TEXT DEFAULT '默认',
+      tags TEXT DEFAULT '[]',
+      notes TEXT DEFAULT '',
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    )
+  `)
+
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_vault_category ON password_vault(category)`)
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_vault_title ON password_vault(title)`)
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_vault_updated ON password_vault(updated_at DESC)`)
 }

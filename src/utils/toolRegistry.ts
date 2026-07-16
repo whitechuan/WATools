@@ -8,6 +8,7 @@ export const TOOL_CATEGORIES: ToolCategoryMeta[] = [
   { id: 'generator', label: '生成器', icon: '🆔', order: 5 },
   { id: 'network', label: '网络', icon: '🌐', order: 6 },
   { id: 'security', label: '安全/加密', icon: '🔐', order: 7 },
+  { id: 'memo', label: '备忘录', icon: '📝', order: 8 },
 ]
 
 export const TOOL_REGISTRY: ToolDescriptor[] = [
@@ -41,6 +42,8 @@ export const TOOL_REGISTRY: ToolDescriptor[] = [
   { id: 'symmetric-crypto', name: '对称加密', icon: '🔒', path: '/tools/symmetric-crypto', description: 'AES-GCM/ChaCha20加密解密', category: 'security' },
   { id: 'asymmetric-crypto', name: 'RSA加密', icon: '🔑', path: '/tools/asymmetric-crypto', description: 'RSA密钥生成、加解密与签名', category: 'security' },
   { id: 'password-generator', name: '密码生成器', icon: '🛡️', path: '/tools/password-generator', description: '密码强度检测与随机密码生成', category: 'security' },
+  // 备忘录
+  { id: 'password-vault', name: '密码库', icon: '🔐', path: '/tools/password-vault', description: '本地加密密码管理器', category: 'memo' },
 ]
 
 export interface ToolGroup {
