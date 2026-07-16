@@ -1,6 +1,6 @@
 [package]
 name = "watools"
-version = "0.1.0"
+version = "3.0.0"
 description = "WATools - 开发者工具箱"
 authors = ["white chuan"]
 edition = "2021"
