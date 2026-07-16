@@ -107,6 +107,7 @@ pub fn run() {
             commands::number_base::number_base_convert,
             commands::hex_codec::hex_encode,
             commands::hex_codec::hex_decode,
+            commands::hmac_calculator::calculate_hmac,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

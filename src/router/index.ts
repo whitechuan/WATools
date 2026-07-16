@@ -123,6 +123,12 @@ const router = createRouter({
           name: 'HexCodec',
           component: () => import('@/views/tools/HexCodecView.vue'),
           meta: { title: 'Hex编解码', icon: '🔣' }
+        },
+        {
+          path: 'hmac-calculator',
+          name: 'HmacCalculator',
+          component: () => import('@/views/tools/HmacCalculatorView.vue'),
+          meta: { title: 'HMAC计算', icon: '🔐' }
         }
       ]
     },
