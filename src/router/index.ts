@@ -147,6 +147,12 @@ const router = createRouter({
           name: 'PasswordGenerator',
           component: () => import('@/views/tools/PasswordGeneratorView.vue'),
           meta: { title: '密码生成器', icon: '🔑' }
+        },
+        {
+          path: 'password-vault',
+          name: 'PasswordVault',
+          component: () => import('@/views/tools/PasswordVaultView.vue'),
+          meta: { title: '密码库', icon: '🔐' }
         }
       ]
     },
