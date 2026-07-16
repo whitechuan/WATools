@@ -141,6 +141,12 @@ const router = createRouter({
           name: 'AsymmetricCrypto',
           component: () => import('@/views/tools/AsymmetricCryptoView.vue'),
           meta: { title: 'RSA非对称加密', icon: '🔐' }
+        },
+        {
+          path: 'password-generator',
+          name: 'PasswordGenerator',
+          component: () => import('@/views/tools/PasswordGeneratorView.vue'),
+          meta: { title: '密码生成器', icon: '🔑' }
         }
       ]
     },

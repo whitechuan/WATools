@@ -117,6 +117,8 @@ pub fn run() {
             commands::asymmetric_crypto::rsa_decrypt,
             commands::asymmetric_crypto::rsa_sign,
             commands::asymmetric_crypto::rsa_verify,
+            commands::password_generator::check_password_strength,
+            commands::password_generator::generate_password,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
