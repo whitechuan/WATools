@@ -289,3 +289,13 @@ export interface VaultEncryptResult {
   ciphertext: string
   nonce: string
 }
+
+export interface ChangePasswordResult {
+  new_hash: string
+  reencrypted: Array<{ id: number; ciphertext: string; nonce: string }>
+}
+
+export interface RecoveryCodeResult {
+  code: string
+  code_hash: string
+}

@@ -38,27 +38,68 @@
         </template>
       </NeuCard>
 
-      <!-- 已初始化：解锁 -->
-      <NeuCard v-else title="🔒 密码库已锁定" elevation="raised" class="password-vault-view__lock-card">
-        <div class="password-vault-view__form">
-          <NeuInput
-            v-model="unlockPassword"
-            type="password"
-            placeholder="输入主密码解锁..."
-            class="password-vault-view__input"
-            @keyup.enter="handleUnlock"
-          />
-          <div v-if="error" class="password-vault-view__error">{{ error }}</div>
-        </div>
-        <template #footer>
-          <div class="password-vault-view__actions">
-            <NeuButton type="primary" :loading="loading" @click="handleUnlock">解锁</NeuButton>
+      <!-- 已初始化：解锁 / 恢复流程 -->
+      <template v-else>
+        <!-- 恢复码流程 -->
+        <NeuCard v-if="showRecoveryFlow" title="🔑 使用恢复码重设" elevation="raised" class="password-vault-view__lock-card">
+          <div class="password-vault-view__form">
+            <div class="password-vault-view__recovery-warning">
+              ⚠️ 使用恢复码将<strong>清空所有密码记录</strong>并重新设置主密码。此操作不可撤销！
+            </div>
+            <NeuInput
+              v-model="recoveryInput"
+              placeholder="输入恢复码（如 ABCD-1234-EFGH-5678）"
+              class="password-vault-view__input"
+            />
+            <NeuInput
+              v-model="recoveryNewPassword"
+              type="password"
+              placeholder="新主密码（至少8位）"
+              class="password-vault-view__input"
+            />
+            <NeuInput
+              v-model="recoveryConfirmPassword"
+              type="password"
+              placeholder="确认新主密码"
+              class="password-vault-view__input"
+            />
+            <div v-if="error" class="password-vault-view__error">{{ error }}</div>
           </div>
-        </template>
-      </NeuCard>
+          <template #footer>
+            <div class="password-vault-view__actions">
+              <NeuButton type="primary" :loading="loading" @click="handleRecover">确认重设</NeuButton>
+              <NeuButton @click="showRecoveryFlow = false; error = ''">返回</NeuButton>
+            </div>
+          </template>
+        </NeuCard>
 
-      <div class="password-vault-view__lock-hint">
-        主密码用于加密所有密码记录，遗忘后无法恢复
+        <!-- 正常解锁 -->
+        <NeuCard v-else title="🔒 密码库已锁定" elevation="raised" class="password-vault-view__lock-card">
+          <div class="password-vault-view__form">
+            <NeuInput
+              v-model="unlockPassword"
+              type="password"
+              placeholder="输入主密码解锁..."
+              class="password-vault-view__input"
+              @keyup.enter="handleUnlock"
+            />
+            <div v-if="error" class="password-vault-view__error">{{ error }}</div>
+          </div>
+          <template #footer>
+            <div class="password-vault-view__actions">
+              <NeuButton type="primary" :loading="loading" @click="handleUnlock">解锁</NeuButton>
+            </div>
+          </template>
+        </NeuCard>
+
+        <div class="password-vault-view__lock-hint">
+          <span>主密码用于加密所有密码记录</span>
+          <a class="password-vault-view__forgot-link" @click="showRecoveryFlow = true; error = ''">忘记主密码？</a>
+        </div>
+      </template>
+
+      <div v-if="!isInitialized" class="password-vault-view__lock-hint">
+        主密码用于加密所有密码记录，请妥善保管
       </div>
     </div>
 
@@ -83,61 +124,10 @@
           <div class="password-vault-view__toolbar-right">
             <span class="password-vault-view__count">{{ filteredEntries.length }} 条记录</span>
             <NeuButton size="sm" type="primary" @click="handleShowAdd">＋ 添加</NeuButton>
+            <NeuButton size="sm" @click="showChangePassword = true; error = ''">🔑 改密码</NeuButton>
             <NeuButton size="sm" @click="lock">🔒 锁定</NeuButton>
           </div>
         </div>
-      </NeuCard>
-
-      <!-- 添加/编辑表单 -->
-      <NeuCard
-        v-if="showAddForm || editingEntry"
-        :title="editingEntry ? '✏️ 编辑记录' : '＋ 添加记录'"
-        elevation="raised"
-        class="password-vault-view__form-card"
-      >
-        <div class="password-vault-view__entry-form">
-          <div class="password-vault-view__form-row">
-            <NeuInput v-model="formData.title" placeholder="标题 *" class="password-vault-view__input" />
-            <NeuInput v-model="formData.username" placeholder="用户名" class="password-vault-view__input" />
-          </div>
-          <div class="password-vault-view__form-row">
-            <div class="password-vault-view__password-field">
-              <NeuInput
-                v-model="formData.password"
-                :type="showFormPassword ? 'text' : 'password'"
-                placeholder="密码 *"
-                class="password-vault-view__input"
-              />
-              <button class="password-vault-view__toggle-btn" @click="showFormPassword = !showFormPassword">
-                {{ showFormPassword ? '🙈' : '👁️' }}
-              </button>
-            </div>
-            <NeuInput v-model="formData.url" placeholder="URL" class="password-vault-view__input" />
-          </div>
-          <!-- 密码强度条 -->
-          <div v-if="formStrength" class="password-vault-view__strength">
-            <div class="password-vault-view__strength-label">
-              强度: {{ scoreLabels[formStrength.score] }}
-            </div>
-            <div class="password-vault-view__progress-bar">
-              <div
-                class="password-vault-view__progress-fill"
-                :style="{ width: ((formStrength.score + 1) / 5 * 100) + '%', backgroundColor: scoreColors[formStrength.score] }"
-              ></div>
-            </div>
-          </div>
-          <div class="password-vault-view__form-row">
-            <NeuInput v-model="formData.category" placeholder="分类（如：社交、工作）" class="password-vault-view__input" />
-            <NeuInput v-model="formData.tagsInput" placeholder="标签（逗号分隔）" class="password-vault-view__input" />
-          </div>
-          <NeuInput v-model="formData.notes" placeholder="备注" class="password-vault-view__input password-vault-view__input--full" />
-        </div>
-        <template #footer>
-          <div class="password-vault-view__actions">
-            <NeuButton type="primary" :loading="loading" @click="handleSave">保存</NeuButton>
-            <NeuButton @click="handleCancelForm">取消</NeuButton>
-          </div>
-        </template>
       </NeuCard>
 
       <!-- 密码列表 -->
@@ -194,6 +184,138 @@
         <div v-if="showCopied" class="password-vault-view__toast">已复制（15秒后自动清空剪贴板）</div>
       </transition>
     </template>
+
+    <!-- 添加/编辑 Modal -->
+    <teleport to="body">
+      <transition name="fade">
+        <div v-if="showModal" class="password-vault-view__modal-overlay" @click.self="handleCloseModal">
+          <div class="password-vault-view__modal-content">
+            <NeuCard :title="modalMode === 'edit' ? '✏️ 编辑记录' : '＋ 添加记录'" elevation="raised">
+              <div class="password-vault-view__entry-form">
+                <div class="password-vault-view__form-row">
+                  <NeuInput v-model="formData.title" placeholder="标题 *" class="password-vault-view__input" />
+                  <NeuInput v-model="formData.username" placeholder="用户名" class="password-vault-view__input" />
+                </div>
+                <div class="password-vault-view__form-row">
+                  <div class="password-vault-view__password-field">
+                    <NeuInput
+                      v-model="formData.password"
+                      :type="showFormPassword ? 'text' : 'password'"
+                      placeholder="密码 *"
+                      class="password-vault-view__input"
+                    />
+                    <button class="password-vault-view__toggle-btn" @click="showFormPassword = !showFormPassword">
+                      {{ showFormPassword ? '🙈' : '👁️' }}
+                    </button>
+                  </div>
+                  <NeuInput v-model="formData.url" placeholder="URL" class="password-vault-view__input" />
+                </div>
+                <!-- 密码强度条 -->
+                <div v-if="formStrength" class="password-vault-view__strength">
+                  <div class="password-vault-view__strength-label">
+                    强度: {{ scoreLabels[formStrength.score] }}
+                  </div>
+                  <div class="password-vault-view__progress-bar">
+                    <div
+                      class="password-vault-view__progress-fill"
+                      :style="{ width: ((formStrength.score + 1) / 5 * 100) + '%', backgroundColor: scoreColors[formStrength.score] }"
+                    ></div>
+                  </div>
+                </div>
+                <div class="password-vault-view__form-row">
+                  <NeuInput v-model="formData.category" placeholder="分类（如：社交、工作）" class="password-vault-view__input" />
+                  <NeuInput v-model="formData.tagsInput" placeholder="标签（逗号分隔）" class="password-vault-view__input" />
+                </div>
+                <NeuInput v-model="formData.notes" placeholder="备注" class="password-vault-view__input password-vault-view__input--full" />
+                <div v-if="error" class="password-vault-view__error">{{ error }}</div>
+              </div>
+              <template #footer>
+                <div class="password-vault-view__actions">
+                  <NeuButton type="primary" :loading="loading" @click="handleSave">保存</NeuButton>
+                  <NeuButton @click="handleCloseModal">取消</NeuButton>
+                </div>
+              </template>
+            </NeuCard>
+          </div>
+        </div>
+      </transition>
+    </teleport>
+
+    <!-- 恢复码展示 Modal -->
+    <teleport to="body">
+      <transition name="fade">
+        <div v-if="showRecoveryCode" class="password-vault-view__modal-overlay">
+          <div class="password-vault-view__modal-content">
+            <NeuCard title="🔑 请保存您的恢复码" elevation="raised">
+              <div class="password-vault-view__recovery-display">
+                <div class="password-vault-view__recovery-code">{{ recoveryCode }}</div>
+                <div class="password-vault-view__recovery-hint">
+                  <p>请将恢复码保存到安全的地方。当您忘记主密码时，可以使用恢复码重设密码。</p>
+                  <p class="password-vault-view__recovery-warn">⚠️ 使用恢复码重设将清空所有已存储的密码记录。</p>
+                  <p class="password-vault-view__recovery-warn">⚠️ 此恢复码只显示一次，关闭后无法再次查看。</p>
+                </div>
+              </div>
+              <template #footer>
+                <div class="password-vault-view__actions">
+                  <NeuButton @click="handleCopyRecoveryCode">📋 复制恢复码</NeuButton>
+                  <NeuButton type="primary" @click="showRecoveryCode = false">我已安全保存</NeuButton>
+                </div>
+              </template>
+            </NeuCard>
+          </div>
+        </div>
+      </transition>
+    </teleport>
+
+    <!-- 修改主密码 Modal -->
+    <teleport to="body">
+      <transition name="fade">
+        <div v-if="showChangePassword" class="password-vault-view__modal-overlay" @click.self="showChangePassword = false">
+          <div class="password-vault-view__modal-content">
+            <NeuCard title="🔑 修改主密码" elevation="raised">
+              <div class="password-vault-view__form">
+                <NeuInput
+                  v-model="changePwdOld"
+                  type="password"
+                  placeholder="当前主密码"
+                  class="password-vault-view__input"
+                />
+                <NeuInput
+                  v-model="changePwdNew"
+                  type="password"
+                  placeholder="新主密码（至少8位）"
+                  class="password-vault-view__input"
+                />
+                <NeuInput
+                  v-model="changePwdConfirm"
+                  type="password"
+                  placeholder="确认新主密码"
+                  class="password-vault-view__input"
+                />
+                <div v-if="changePwdStrength" class="password-vault-view__strength">
+                  <div class="password-vault-view__strength-label">
+                    强度: {{ scoreLabels[changePwdStrength.score] }}
+                  </div>
+                  <div class="password-vault-view__progress-bar">
+                    <div
+                      class="password-vault-view__progress-fill"
+                      :style="{ width: ((changePwdStrength.score + 1) / 5 * 100) + '%', backgroundColor: scoreColors[changePwdStrength.score] }"
+                    ></div>
+                  </div>
+                </div>
+                <div v-if="error" class="password-vault-view__error">{{ error }}</div>
+              </div>
+              <template #footer>
+                <div class="password-vault-view__actions">
+                  <NeuButton type="primary" :loading="loading" @click="handleChangePassword">确认修改</NeuButton>
+                  <NeuButton @click="showChangePassword = false; error = ''">取消</NeuButton>
+                </div>
+              </template>
+            </NeuCard>
+          </div>
+        </div>
+      </transition>
+    </teleport>
   </div>
 </template>
 
@@ -210,9 +332,12 @@ defineOptions({ name: 'PasswordVaultView' })
 
 const {
   isLocked, isInitialized, filteredEntries, searchQuery, filterCategory,
-  categories, showAddForm, editingEntry, error, loading,
+  categories, showModal, modalMode, showRecoveryCode,
+  recoveryCode, showRecoveryFlow, showChangePassword,
+  editingEntry, error, loading,
   initVault, unlock, lock, addEntry, updateEntry,
-  deleteEntry, checkStrength, copyPassword, resetActivity,
+  deleteEntry, changeMasterPassword, recoverWithCode,
+  checkStrength, copyPassword, resetActivity,
 } = usePasswordVault()
 
 // 本地状态
@@ -224,6 +349,17 @@ const showCopied = ref(false)
 const visiblePasswords = ref<Record<number, boolean>>({})
 const initStrength = ref<PasswordStrengthResult | null>(null)
 const formStrength = ref<PasswordStrengthResult | null>(null)
+
+// 恢复码流程
+const recoveryInput = ref('')
+const recoveryNewPassword = ref('')
+const recoveryConfirmPassword = ref('')
+
+// 修改密码
+const changePwdOld = ref('')
+const changePwdNew = ref('')
+const changePwdConfirm = ref('')
+const changePwdStrength = ref<PasswordStrengthResult | null>(null)
 
 const scoreLabels = ['极弱', '弱', '一般', '强', '极强']
 const scoreColors = ['#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e']
@@ -244,15 +380,6 @@ const categoryOptions = computed(() => {
   return opts
 })
 
-// 防抖搜索
-let searchTimer: ReturnType<typeof setTimeout> | null = null
-watch(searchQuery, () => {
-  if (searchTimer) clearTimeout(searchTimer)
-  searchTimer = setTimeout(() => {
-    // searchQuery 已直接绑定 computed
-  }, 300)
-})
-
 // 监听设置密码强度
 let initStrengthTimer: ReturnType<typeof setTimeout> | null = null
 watch(newPassword, (val) => {
@@ -271,6 +398,15 @@ watch(() => formData.password, (val) => {
   }, 300)
 })
 
+// 监听修改密码强度
+let changePwdTimer: ReturnType<typeof setTimeout> | null = null
+watch(changePwdNew, (val) => {
+  if (changePwdTimer) clearTimeout(changePwdTimer)
+  changePwdTimer = setTimeout(async () => {
+    changePwdStrength.value = await checkStrength(val)
+  }, 300)
+})
+
 // 设置主密码
 async function handleInit() {
   if (newPassword.value.length < 8) {
@@ -281,7 +417,11 @@ async function handleInit() {
     error.value = '两次密码输入不一致'
     return
   }
-  await initVault(newPassword.value)
+  const code = await initVault(newPassword.value)
+  if (code) {
+    recoveryCode.value = code
+    showRecoveryCode.value = true
+  }
   newPassword.value = ''
   confirmPassword.value = ''
 }
@@ -296,13 +436,65 @@ async function handleUnlock() {
   unlockPassword.value = ''
 }
 
-// 显示添加表单
+// 恢复码重设
+async function handleRecover() {
+  if (!recoveryInput.value) {
+    error.value = '请输入恢复码'
+    return
+  }
+  if (recoveryNewPassword.value.length < 8) {
+    error.value = '新密码至少需要8个字符'
+    return
+  }
+  if (recoveryNewPassword.value !== recoveryConfirmPassword.value) {
+    error.value = '两次密码输入不一致'
+    return
+  }
+  const newCode = await recoverWithCode(recoveryInput.value, recoveryNewPassword.value)
+  if (newCode) {
+    recoveryCode.value = newCode
+    showRecoveryCode.value = true
+    showRecoveryFlow.value = false
+    recoveryInput.value = ''
+    recoveryNewPassword.value = ''
+    recoveryConfirmPassword.value = ''
+  }
+}
+
+// 修改主密码
+async function handleChangePassword() {
+  if (!changePwdOld.value) {
+    error.value = '请输入当前主密码'
+    return
+  }
+  if (changePwdNew.value.length < 8) {
+    error.value = '新密码至少需要8个字符'
+    return
+  }
+  if (changePwdNew.value !== changePwdConfirm.value) {
+    error.value = '两次密码输入不一致'
+    return
+  }
+  const success = await changeMasterPassword(changePwdOld.value, changePwdNew.value)
+  if (success) {
+    showChangePassword.value = false
+    changePwdOld.value = ''
+    changePwdNew.value = ''
+    changePwdConfirm.value = ''
+    changePwdStrength.value = null
+    error.value = ''
+  }
+}
+
+// 显示添加 Modal
 function handleShowAdd() {
   resetFormData()
   editingEntry.value = null
-  showAddForm.value = true
+  modalMode.value = 'add'
+  showModal.value = true
   showFormPassword.value = false
   formStrength.value = null
+  error.value = ''
 }
 
 // 编辑
@@ -315,8 +507,10 @@ function handleEdit(entry: VaultEntry) {
   formData.tagsInput = entry.tags.join(', ')
   formData.notes = entry.notes
   editingEntry.value = entry
-  showAddForm.value = false
+  modalMode.value = 'edit'
+  showModal.value = true
   showFormPassword.value = false
+  error.value = ''
 }
 
 // 保存
@@ -348,9 +542,9 @@ async function handleSave() {
   resetFormData()
 }
 
-// 取消表单
-function handleCancelForm() {
-  showAddForm.value = false
+// 关闭 Modal
+function handleCloseModal() {
+  showModal.value = false
   editingEntry.value = null
   resetFormData()
   error.value = ''
@@ -378,6 +572,20 @@ async function handleCopy(password: string) {
   await copyPassword(password)
   showCopied.value = true
   setTimeout(() => { showCopied.value = false }, 2000)
+}
+
+// 复制恢复码
+async function handleCopyRecoveryCode() {
+  try {
+    await navigator.clipboard.writeText(recoveryCode.value)
+  } catch {
+    const textarea = document.createElement('textarea')
+    textarea.value = recoveryCode.value
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+  }
 }
 
 // 删除
@@ -415,6 +623,21 @@ async function handleDelete(id: number) {
   font-size: var(--font-size-xs);
   color: var(--text-muted);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.password-vault-view__forgot-link {
+  color: var(--color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: var(--font-size-xs);
+}
+
+.password-vault-view__forgot-link:hover {
+  opacity: 0.8;
 }
 
 /* 表单 */
@@ -482,11 +705,7 @@ async function handleDelete(id: number) {
   white-space: nowrap;
 }
 
-/* 表单卡片 */
-.password-vault-view__form-card {
-  flex-shrink: 0;
-}
-
+/* 条目表单 */
 .password-vault-view__entry-form {
   display: flex;
   flex-direction: column;
@@ -676,6 +895,84 @@ async function handleDelete(id: number) {
 
 .password-vault-view__icon-btn--danger:hover {
   background: rgba(239, 68, 68, 0.1);
+}
+
+/* Modal 遮罩 */
+.password-vault-view__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--spacing-lg);
+}
+
+.password-vault-view__modal-content {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.password-vault-view__modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* 恢复码相关 */
+.password-vault-view__recovery-warning {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--neu-radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.password-vault-view__recovery-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) 0;
+}
+
+.password-vault-view__recovery-code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-primary);
+  background: var(--neu-bg);
+  box-shadow: var(--neu-shadow-pressed);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--neu-radius-md);
+  user-select: all;
+  text-align: center;
+}
+
+.password-vault-view__recovery-hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.password-vault-view__recovery-hint p {
+  margin: var(--spacing-xs) 0;
+}
+
+.password-vault-view__recovery-warn {
+  color: var(--color-error);
+  font-weight: 500;
 }
 
 /* 复制提示 */

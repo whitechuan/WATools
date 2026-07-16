@@ -124,6 +124,9 @@ pub fn run() {
             commands::password_vault::vault_encrypt_password,
             commands::password_vault::vault_decrypt_password,
             commands::password_vault::vault_check_strength,
+            commands::password_vault::vault_change_master_password,
+            commands::password_vault::vault_generate_recovery_code,
+            commands::password_vault::vault_verify_recovery_code,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

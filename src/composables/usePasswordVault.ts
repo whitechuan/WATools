@@ -1,7 +1,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { invoke } from '@tauri-apps/api/core'
 import { getDatabase } from '@/utils/db'
-import type { VaultEntry, VaultEncryptedEntry, VaultEncryptResult, PasswordStrengthResult } from '@/types/tools'
+import type { VaultEntry, VaultEncryptedEntry, VaultEncryptResult, PasswordStrengthResult, ChangePasswordResult, RecoveryCodeResult } from '@/types/tools'
 
 export function usePasswordVault() {
   const isLocked = ref(true)
@@ -17,6 +17,18 @@ export function usePasswordVault() {
   const error = ref('')
   const loading = ref(false)
   const lastActivity = ref(Date.now())
+
+  // Modal 相关状态
+  const showModal = ref(false)
+  const modalMode = ref<'add' | 'edit'>('add')
+
+  // 恢复码相关
+  const showRecoveryCode = ref(false)
+  const recoveryCode = ref('')
+  const showRecoveryFlow = ref(false)
+
+  // 修改主密码相关
+  const showChangePassword = ref(false)
 
   let autoLockTimer: ReturnType<typeof setInterval> | null = null
 
@@ -57,18 +69,25 @@ export function usePasswordVault() {
     }
   }
 
-  // 首次设置主密码
-  async function initVault(password: string) {
+  // 首次设置主密码（返回恢复码）
+  async function initVault(password: string): Promise<string | null> {
     try {
       error.value = ''
       loading.value = true
 
       const hash = await invoke<string>('vault_set_master_password', { password })
 
+      // 生成恢复码
+      const recovery = await invoke<RecoveryCodeResult>('vault_generate_recovery_code')
+
       const db = await getDatabase()
       await db.execute(
         "INSERT OR REPLACE INTO vault_settings (key, value) VALUES ('master_password_hash', $1)",
         [hash]
+      )
+      await db.execute(
+        "INSERT OR REPLACE INTO vault_settings (key, value) VALUES ('recovery_code_hash', $1)",
+        [recovery.code_hash]
       )
 
       masterPasswordHash.value = hash
@@ -77,8 +96,11 @@ export function usePasswordVault() {
       isLocked.value = false
       resetActivity()
       startAutoLock()
+
+      return recovery.code
     } catch (e) {
       error.value = String(e)
+      return null
     } finally {
       loading.value = false
     }
@@ -120,6 +142,7 @@ export function usePasswordVault() {
     searchQuery.value = ''
     filterCategory.value = ''
     showAddForm.value = false
+    showModal.value = false
     editingEntry.value = null
     error.value = ''
     stopAutoLock()
@@ -214,6 +237,7 @@ export function usePasswordVault() {
       )
 
       await loadEntries()
+      showModal.value = false
       showAddForm.value = false
     } catch (e) {
       error.value = String(e)
@@ -262,6 +286,7 @@ export function usePasswordVault() {
       )
 
       await loadEntries()
+      showModal.value = false
       editingEntry.value = null
     } catch (e) {
       error.value = String(e)
@@ -283,6 +308,122 @@ export function usePasswordVault() {
       await loadEntries()
     } catch (e) {
       error.value = String(e)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 修改主密码
+  async function changeMasterPassword(oldPwd: string, newPwd: string): Promise<boolean> {
+    try {
+      error.value = ''
+      loading.value = true
+
+      // 获取所有加密记录
+      const db = await getDatabase()
+      const rows = await db.select<Array<{ id: number; password_encrypted: string; nonce: string }>>(
+        'SELECT id, password_encrypted, nonce FROM password_vault'
+      )
+
+      const encryptedEntries = rows.map(r => ({
+        id: r.id,
+        ciphertext: r.password_encrypted,
+        nonce: r.nonce,
+      }))
+
+      // 调用 Rust 命令重加密
+      const result = await invoke<ChangePasswordResult>('vault_change_master_password', {
+        oldPassword: oldPwd,
+        newPassword: newPwd,
+        oldHash: masterPasswordHash.value,
+        encryptedEntries,
+      })
+
+      // 更新数据库中的哈希
+      await db.execute(
+        "INSERT OR REPLACE INTO vault_settings (key, value) VALUES ('master_password_hash', $1)",
+        [result.new_hash]
+      )
+
+      // 批量更新所有重加密记录
+      for (const entry of result.reencrypted) {
+        await db.execute(
+          'UPDATE password_vault SET password_encrypted = $1, nonce = $2 WHERE id = $3',
+          [entry.ciphertext, entry.nonce, entry.id]
+        )
+      }
+
+      // 更新运行时缓存
+      masterPasswordHash.value = result.new_hash
+      masterPassword.value = newPwd
+
+      // 重新加载条目
+      await loadEntries()
+      return true
+    } catch (e) {
+      error.value = String(e)
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 使用恢复码重设（清空所有记录并设置新密码）
+  async function recoverWithCode(code: string, newPassword: string): Promise<string | null> {
+    try {
+      error.value = ''
+      loading.value = true
+
+      // 获取恢复码哈希
+      const db = await getDatabase()
+      const rows = await db.select<Array<{ value: string }>>(
+        "SELECT value FROM vault_settings WHERE key = 'recovery_code_hash'"
+      )
+      if (rows.length === 0 || !rows[0].value) {
+        error.value = '未设置恢复码'
+        return null
+      }
+
+      // 验证恢复码
+      const valid = await invoke<boolean>('vault_verify_recovery_code', {
+        code,
+        codeHash: rows[0].value,
+      })
+      if (!valid) {
+        error.value = '恢复码错误'
+        return null
+      }
+
+      // 清空所有密码记录
+      await db.execute('DELETE FROM password_vault')
+
+      // 设置新主密码
+      const hash = await invoke<string>('vault_set_master_password', { password: newPassword })
+      await db.execute(
+        "INSERT OR REPLACE INTO vault_settings (key, value) VALUES ('master_password_hash', $1)",
+        [hash]
+      )
+
+      // 生成新恢复码
+      const recovery = await invoke<RecoveryCodeResult>('vault_generate_recovery_code')
+      await db.execute(
+        "INSERT OR REPLACE INTO vault_settings (key, value) VALUES ('recovery_code_hash', $1)",
+        [recovery.code_hash]
+      )
+
+      // 更新运行时状态
+      masterPasswordHash.value = hash
+      masterPassword.value = newPassword
+      isInitialized.value = true
+      isLocked.value = false
+      entries.value = []
+      resetActivity()
+      startAutoLock()
+
+      return recovery.code
+    } catch (e) {
+      error.value = String(e)
+      return null
     } finally {
       loading.value = false
     }
@@ -363,6 +504,12 @@ export function usePasswordVault() {
     filterCategory,
     categories,
     showAddForm,
+    showModal,
+    modalMode,
+    showRecoveryCode,
+    recoveryCode,
+    showRecoveryFlow,
+    showChangePassword,
     editingEntry,
     error,
     loading,
@@ -375,6 +522,8 @@ export function usePasswordVault() {
     addEntry,
     updateEntry,
     deleteEntry,
+    changeMasterPassword,
+    recoverWithCode,
     checkStrength,
     copyPassword,
     resetActivity,
