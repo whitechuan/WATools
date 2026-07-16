@@ -1,4 +1,4 @@
-# WATools v0.3.0 Release Notes
+# WATools v3.0 Release Notes
 
 ## 🔐 新增安全/加密工具分类
 
