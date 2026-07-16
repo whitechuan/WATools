@@ -1,17 +1,20 @@
 import type { ToolDescriptor, ToolCategoryMeta, ToolCategory } from '@/types/tools'
 
 export const TOOL_CATEGORIES: ToolCategoryMeta[] = [
-  { id: 'time', label: '时间/日期', icon: '🕐', order: 1 },
-  { id: 'format', label: '数据格式', icon: '📋', order: 2 },
-  { id: 'encoding', label: '编码/解码', icon: '🔤', order: 3 },
-  { id: 'text', label: '文本处理', icon: '📝', order: 4 },
-  { id: 'generator', label: '生成器', icon: '🆔', order: 5 },
-  { id: 'network', label: '网络', icon: '🌐', order: 6 },
-  { id: 'security', label: '安全/加密', icon: '🔐', order: 7 },
-  { id: 'memo', label: '备忘录', icon: '📝', order: 8 },
+  { id: 'memo', label: '备忘录', icon: '📝', order: 1 },
+  { id: 'time', label: '时间/日期', icon: '🕐', order: 2 },
+  { id: 'format', label: '数据格式', icon: '📋', order: 3 },
+  { id: 'encoding', label: '编码/解码', icon: '🔤', order: 4 },
+  { id: 'text', label: '文本处理', icon: '📝', order: 5 },
+  { id: 'generator', label: '生成器', icon: '🆔', order: 6 },
+  { id: 'network', label: '网络', icon: '🌐', order: 7 },
+  { id: 'security', label: '安全/加密', icon: '🔐', order: 8 },
+  
 ]
 
 export const TOOL_REGISTRY: ToolDescriptor[] = [
+  // 备忘录
+  { id: 'password-vault', name: '密码库', icon: '🔐', path: '/tools/password-vault', description: '本地加密密码管理器', category: 'memo' },
   // 时间/日期
   { id: 'time-converter', name: '时间转换', icon: '🕐', path: '/tools/time-converter', description: '多种时间格式互相转换', category: 'time' },
   { id: 'cron-parser', name: 'Cron解析器', icon: '⏲️', path: '/tools/cron-parser', description: '解析Cron表达式并查看执行时间', category: 'time' },
@@ -42,8 +45,6 @@ export const TOOL_REGISTRY: ToolDescriptor[] = [
   { id: 'symmetric-crypto', name: '对称加密', icon: '🔒', path: '/tools/symmetric-crypto', description: 'AES-GCM/ChaCha20加密解密', category: 'security' },
   { id: 'asymmetric-crypto', name: 'RSA加密', icon: '🔑', path: '/tools/asymmetric-crypto', description: 'RSA密钥生成、加解密与签名', category: 'security' },
   { id: 'password-generator', name: '密码生成器', icon: '🛡️', path: '/tools/password-generator', description: '密码强度检测与随机密码生成', category: 'security' },
-  // 备忘录
-  { id: 'password-vault', name: '密码库', icon: '🔐', path: '/tools/password-vault', description: '本地加密密码管理器', category: 'memo' },
 ]
 
 export interface ToolGroup {
