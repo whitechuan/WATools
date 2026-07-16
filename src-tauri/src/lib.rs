@@ -105,6 +105,8 @@ pub fn run() {
             commands::ascii_convert::text_to_hex_ascii,
             commands::markdown_preview::markdown_to_html,
             commands::number_base::number_base_convert,
+            commands::hex_codec::hex_encode,
+            commands::hex_codec::hex_decode,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

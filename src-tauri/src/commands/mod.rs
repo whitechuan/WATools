@@ -16,3 +16,4 @@ pub mod text_stats;
 pub mod ascii_convert;
 pub mod markdown_preview;
 pub mod number_base;
+pub mod hex_codec;

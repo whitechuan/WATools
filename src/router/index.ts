@@ -117,6 +117,12 @@ const router = createRouter({
           name: 'NumberBase',
           component: () => import('@/views/tools/NumberBaseView.vue'),
           meta: { title: '进制转换', icon: '🧮' }
+        },
+        {
+          path: 'hex-codec',
+          name: 'HexCodec',
+          component: () => import('@/views/tools/HexCodecView.vue'),
+          meta: { title: 'Hex编解码', icon: '🔣' }
         }
       ]
     },
