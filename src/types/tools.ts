@@ -56,7 +56,7 @@ export interface HistoryEntry {
 }
 
 // 工具分类
-export type ToolCategory = 'time' | 'format' | 'encoding' | 'text' | 'generator' | 'network'
+export type ToolCategory = 'time' | 'format' | 'encoding' | 'text' | 'generator' | 'network' | 'security'
 
 export interface ToolCategoryMeta {
   id: ToolCategory
@@ -206,4 +206,53 @@ export interface NumberBaseResult {
   octal: string
   decimal: string
   hex: string
+}
+
+// ===== Hex编解码 =====
+export interface HexCodecResult {
+  output: string
+}
+
+// ===== HMAC计算 =====
+export interface HmacResult {
+  hmac_sha256: string
+  hmac_sha512: string
+}
+
+// ===== 对称加密 =====
+export interface SymmetricEncryptResult {
+  ciphertext: string  // Base64编码
+  nonce: string       // Base64编码
+  algorithm: string
+}
+
+// ===== 非对称加密 =====
+export interface RsaKeyPairResult {
+  public_key_pem: string
+  private_key_pem: string
+  key_size: number
+}
+
+export interface RsaEncryptResult {
+  output: string  // Base64编码
+}
+
+export interface SignatureResult {
+  signature: string  // Base64编码
+  valid?: boolean
+}
+
+// ===== 密码生成器 =====
+export interface PasswordStrengthResult {
+  score: number        // 0-4
+  crack_time: string
+  feedback: string[]
+}
+
+export interface GeneratePasswordOptions {
+  length: number
+  uppercase: boolean
+  lowercase: boolean
+  digits: boolean
+  symbols: boolean
 }

@@ -7,6 +7,7 @@ export const TOOL_CATEGORIES: ToolCategoryMeta[] = [
   { id: 'text', label: '文本处理', icon: '📝', order: 4 },
   { id: 'generator', label: '生成器', icon: '🆔', order: 5 },
   { id: 'network', label: '网络', icon: '🌐', order: 6 },
+  { id: 'security', label: '安全/加密', icon: '🔐', order: 7 },
 ]
 
 export const TOOL_REGISTRY: ToolDescriptor[] = [
@@ -34,6 +35,12 @@ export const TOOL_REGISTRY: ToolDescriptor[] = [
   { id: 'color-converter', name: '颜色转换', icon: '🎨', path: '/tools/color-converter', description: 'HEX/RGB/HSL颜色格式互相转换', category: 'generator' },
   // 网络
   { id: 'http-client', name: 'HTTP请求器', icon: '🌐', path: '/tools/http-client', description: '发送HTTP请求并查看响应', category: 'network' },
+  // 安全/加密
+  { id: 'hex-codec', name: 'Hex编解码', icon: '💾', path: '/tools/hex-codec', description: 'Hex与文本/二进制互转', category: 'security' },
+  { id: 'hmac-calculator', name: 'HMAC计算', icon: '🔏', path: '/tools/hmac-calculator', description: '计算HMAC-SHA256/SHA512', category: 'security' },
+  { id: 'symmetric-crypto', name: '对称加密', icon: '🔒', path: '/tools/symmetric-crypto', description: 'AES-GCM/ChaCha20加密解密', category: 'security' },
+  { id: 'asymmetric-crypto', name: 'RSA加密', icon: '🔑', path: '/tools/asymmetric-crypto', description: 'RSA密钥生成、加解密与签名', category: 'security' },
+  { id: 'password-generator', name: '密码生成器', icon: '🛡️', path: '/tools/password-generator', description: '密码强度检测与随机密码生成', category: 'security' },
 ]
 
 export interface ToolGroup {
