@@ -21,3 +21,4 @@ pub mod hmac_calculator;
 pub mod symmetric_crypto;
 pub mod asymmetric_crypto;
 pub mod password_generator;
+pub mod password_vault;
